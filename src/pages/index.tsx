@@ -1,8 +1,11 @@
-
 export default function Home() {
-  return (
-    <div className="bg-slate-900">
-
-    </div>
-  )
+    return (
+<main className="w-screen h-screen  flex justify-center items-center">
+<aside>
+    
+</aside>
+    
+</main>
+    
+    )
 }
