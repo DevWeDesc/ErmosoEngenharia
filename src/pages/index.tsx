@@ -1,7 +1,6 @@
 import Image from "next/image";
 import { useForm, SubmitHandler, FieldValues } from "react-hook-form";
 import logo from "../../public/hermosoLogo.png";
-import { toast }from 'react-toastify'
 import { Input } from "@/components/Input";
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
