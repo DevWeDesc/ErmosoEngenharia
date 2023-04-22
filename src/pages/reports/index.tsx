@@ -11,8 +11,7 @@ const Status = dynamic(() => import("./styles").then((mod) => mod.Status), {
 export default function Reports() {
 
   return (
-<Flex direction="column" h="100vh">
-    <Header />
+<Flex direction="column" h="80vh">
     <Flex w="100%" my="6" maxWidth={1480} mx="auto" px="6">
       <Sidebar />
       <SimpleGrid flex='1' gap="4" minChildWidth="320px" alignItems="flex-start" >

@@ -1,6 +1,7 @@
-import {Box, Stack, Text, Link, Icon, Flex} from '@chakra-ui/react'
+import {Box, Stack, Text, Flex} from '@chakra-ui/react'
 import {RiDashboardLine, RiContactsLine, RiChatHistoryLine} from 'react-icons/ri'
 import { TbReportSearch } from 'react-icons/tb'
+import { NavLink } from './NavLink'
 export function Sidebar() {
   return (
       <Flex justify="center" m="2" p="4" borderRadius='8' className='text-white w-64 h-80 bg-slate-900 rounded-sm first-letter:
@@ -10,27 +11,13 @@ export function Sidebar() {
           <Box>
             <Text className='font-bold text-zinc-300 text-sm'>GERAL</Text>
             <Stack spacing="4" className='mt-8' align="stretch">
-            <Link href='/home' display="flex" alignItems="center" color="green.300">
-            <Icon as={RiDashboardLine} fontSize="20" />
-            <Text ml='4'fontWeight="medium">Dashboard</Text>
-            </Link>
+              <NavLink href='/home' title='Dashboard' icon={RiDashboardLine} />
 
-            <Link  href='/users' display="flex" alignItems="center">
-            <Icon as={RiContactsLine} fontSize="20" />
-            <Text ml='4'fontWeight="medium">Usuários</Text>
-            </Link>
+              <NavLink href='/users' title='Usuários' icon={RiContactsLine} />
 
-            <Link  href='/reports' display="flex" alignItems="center">
-            <Icon as={TbReportSearch} fontSize="20" />
-            <Text ml='4'fontWeight="medium">Laudos</Text>
-            </Link>
+              <NavLink href='/reports' title='Laudos' icon={TbReportSearch} />
 
-            <Link href='/history'  display="flex" alignItems="center">
-            <Icon as={RiChatHistoryLine} fontSize="20" />
-            <Text ml='4'fontWeight="medium">Histórico</Text>
-            </Link>
-
-
+              <NavLink href='/history' title='Histórico' icon={RiChatHistoryLine} />
             </Stack>
           </Box>
         </Stack>

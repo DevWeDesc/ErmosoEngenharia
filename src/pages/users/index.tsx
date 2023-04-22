@@ -5,8 +5,7 @@ import { Flex, SimpleGrid, Box, Table, Thead, Th, Tr, Tbody, Td, Button, Heading
 import { RiAddLine, RiPencilLine } from "react-icons/ri";
 export default function Users() {
   return (
-<Flex direction="column" h="100vh">
-    <Header />
+<Flex direction="column"h="80vh">
     <Flex w="100%" my="6" maxWidth={1480} mx="auto" px="6">
       <Sidebar />
       <SimpleGrid flex='1' gap="4" minChildWidth="320px" alignItems="flex-start" >

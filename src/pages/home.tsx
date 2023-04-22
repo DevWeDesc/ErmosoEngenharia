@@ -2,6 +2,7 @@ import { Header } from "@/components/Header";
 import { Sidebar } from "@/components/Sidebar";
 import dynamic from "next/dynamic";
 import { Flex, SimpleGrid, Box, Text, theme } from "@chakra-ui/react";
+import { Footer } from "@/components/Footer";
 const Chart = dynamic(() => import  ('react-apexcharts'),{
   ssr: false
 } )
@@ -81,8 +82,7 @@ const series = [
 export default function Home() {
 
   return (
-<Flex direction="column" h="100vh">
-    <Header />
+<Flex direction="column" h="80vh">
     <Flex w="100%" my="6" maxWidth={1480} mx="auto" px="6">
       <Sidebar />
       <SimpleGrid flex='1' gap="4" minChildWidth="320px" alignItems="flex-start" >

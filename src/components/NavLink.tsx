@@ -1,17 +1,22 @@
-import {Box, Stack, Text, Link, Icon, Flex} from '@chakra-ui/react'
+import { Text, Link, Icon, LinkProps } from '@chakra-ui/react'
 import { ElementType } from 'react'
-import {RiDashboardLine, RiContactsLine, RiChatHistoryLine} from 'react-icons/ri'
+import { ActiveLink } from './ActiveLink'
 
-interface NavLinkProps {
+interface NavLinkProps extends LinkProps {
   icon: ElementType
-  title: string;
+  title: string
+  href: string;
 }
 
-export function NavLink({icon, title} : NavLinkProps) {
+export function NavLink({ icon, title, href, ...rest }: NavLinkProps) {
   return (
-    <Link display="flex" alignItems="center" color="green.300">
-    <Icon as={icon} fontSize="20" />
-    <Text ml='4'fontWeight="medium">{title}</Text>
-    </Link>
+    <ActiveLink href={href} passHref >
+      <Link {...rest}  display="flex" alignItems="center" color="green.300">
+      <Icon as={icon} fontSize="20" />
+      <Text ml="4" fontWeight="medium">
+        {title}
+      </Text>
+      </Link>
+    </ActiveLink>
   )
 }
