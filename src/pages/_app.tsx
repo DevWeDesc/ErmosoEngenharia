@@ -5,14 +5,16 @@ import { ChakraProvider } from '@chakra-ui/react'
 import { AuthProvider } from '@/contexts/AuthContext';
 import { Footer } from '@/components/Footer';
 import { Header } from '@/components/Header';
+
 export default function App({ Component, pageProps }: AppProps) {
+
   return (
     <ChakraProvider>
       <Header />
       <AuthProvider>
       <Component {...pageProps} />
       <Footer />
-     <ToastContainer  autoClose={3000}/>
+      <ToastContainer  autoClose={3000}/>
       </AuthProvider>
     </ChakraProvider>
   

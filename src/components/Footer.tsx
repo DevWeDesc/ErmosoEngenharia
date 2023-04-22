@@ -1,7 +1,13 @@
 import { HStack, Button, Flex, Text, Icon, } from '@chakra-ui/react'
 import Link from 'next/link'
+import { useRouter } from 'next/router';
 import { AiOutlineExclamation } from 'react-icons/ai'
+
 export function Footer() {
+  const {asPath, pathname} = useRouter()
+  if(pathname === "/") {
+    return null;
+  }
   return (
     <Flex 
     justify="space-evenly"

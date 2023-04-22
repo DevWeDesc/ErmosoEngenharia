@@ -6,6 +6,10 @@ import { useRouter } from 'next/router'
 import { toast } from 'react-toastify'
 
 export function Header() {
+  const {asPath, pathname} = useRouter()
+  if(pathname === "/") {
+    return null;
+  }
   const{push} = useRouter()  
   const handleLogOut = () => {
       push('/')
