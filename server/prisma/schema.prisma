@@ -17,3 +17,15 @@ model User {
   username String?
   roles    String[] @default(["admin", "user"])
 }
+
+model ReportReceived {
+  id             Int    @id @default(autoincrement())
+  customerName   String
+  address        String
+  contactOne     String
+  contactTwo     String
+  registration   String
+  iptu           String
+  leadNumber     String
+  guaranteeValue String
+}
