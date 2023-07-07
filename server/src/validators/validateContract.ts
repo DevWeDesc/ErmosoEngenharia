@@ -7,15 +7,16 @@ function ValidationContract()  {
     errors = []
 }
 
-ValidationContract.prototype.userAlreadyExists =    async  (value: string, message: string) => {
-        if(!value) {
-            await prisma.user.findUnique({
+ValidationContract.prototype.userAlreadyExists =  async  (value: string, message: string) => {
+
+          const userAlreadyExist =  await prisma.user.findUnique({
                 where: {
                     email: value
                 }
             })
-        }
-        errors.push({message: message})
+        
+            if(userAlreadyExist) errors.push({message: message})
+        
 }
 
 ValidationContract.prototype.errors = () => { 
