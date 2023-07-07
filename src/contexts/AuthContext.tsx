@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import { useRouter } from "next/router";
 
 
+
 type SignInCredentials = {
   email: string;
   password: string;
@@ -12,6 +13,7 @@ type SignInCredentials = {
 type AuthContextData = {
 signIn(credentials: SignInCredentials): Promise<void>
 isAuthenticated: boolean
+user: UserInfo
 }
 
 type AuthProvideProps = {
@@ -25,10 +27,17 @@ type UserProps = {
   roles: "admin" | "user"
 }
 
+type UserInfo = {
+  email: string;
+  username: string;
+
+}
+
 export const AuthContext = createContext({} as AuthContextData)
 
 export function AuthProvider({children}: AuthProvideProps) {
 const [users, setUsers] = useState<UserProps[]>([])
+const [user, setUser] = useState<UserInfo>({ email: '', username: ''})
 const router = useRouter()
 useEffect(() => {
  async function getAllUsers() {
@@ -40,15 +49,17 @@ useEffect(() => {
 
   const isAuthenticated = false
   async function signIn ({email, password}: SignInCredentials) {
-      const validateUser = users.find(user => user.email === email && user.password === password) 
-          if(validateUser) {
+      const validateUser = users.find(user => user.email === email && user.password === password)
+      if(validateUser) {
+            
+            setUser({email: validateUser.email, username: validateUser.username})
             toast.success('usuário valido', {theme: 'dark'}); router.push('/home')
           } else if(!validateUser) toast.error("Usuário não encontrado", {theme: 'dark'});router.push('/')
   }
 
 
    return (
-    <AuthContext.Provider value={{isAuthenticated, signIn}}>
+    <AuthContext.Provider value={{isAuthenticated, signIn, user}}>
       {children}
     </AuthContext.Provider>
   )

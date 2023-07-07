@@ -4,8 +4,12 @@ import Image from 'next/image'
 import { RiNotificationLine, RiUserAddLine } from 'react-icons/ri'
 import { useRouter } from 'next/router'
 import { toast } from 'react-toastify'
+import { useContext } from "react";
+import { AuthContext } from '@/contexts/AuthContext'
 
 export function Header() {
+  const { user } = useContext(AuthContext)
+  
   const {asPath, pathname} = useRouter()
   if(pathname === "/") {
     return null;
@@ -47,10 +51,10 @@ export function Header() {
       >
         <Flex m="2" p="2" direction="column">
           <Text fontSize="sm" className="text-zinc-200">
-            Dilan lopez
+            {user.username.charAt(0).toUpperCase() + user.username.slice(1)}
           </Text>
           <Text fontSize="sm" className="text-zinc-200">
-            Dilanlopez009@gmail.com
+          {user.email}
           </Text>
         </Flex>
 

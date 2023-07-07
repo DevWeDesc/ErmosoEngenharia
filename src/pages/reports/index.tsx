@@ -1,14 +1,17 @@
+import Forms from "@/components/Forms";
 import { Header } from "@/components/Header";
 import { Paginaton } from "@/components/Pagination";
 import { Sidebar } from "@/components/Sidebar";
-import { Flex, SimpleGrid, Box, Text,  Table, Thead, Th, Tr, Tbody, Td, Button } from "@chakra-ui/react";
+import { Flex, SimpleGrid, Box, Text,  Table, Thead, Th, Tr, Tbody, Td, Button, Input } from "@chakra-ui/react";
 import dynamic from "next/dynamic";
+import { useState } from 'react';
 
 
 const Status = dynamic(() => import("./styles").then((mod) => mod.Status), {
   ssr: false,
 });
 export default function Reports() {
+  const [ formIsTrue, setFormIsTrue ] = useState<boolean>(true)
 
   return (
 <Flex direction="column" h="80vh">
@@ -24,6 +27,10 @@ export default function Reports() {
         minHeight="320px"
         m="2"
         >
+        {
+        formIsTrue ?
+        <>
+        
         <Text mb="4" fontWeight="bold" className="text-zinc-300">LAUDOS ABERTOS</Text>
         <Table colorScheme="whatsapp">
           <Thead  >
@@ -48,18 +55,25 @@ export default function Reports() {
               <Td className="text-zinc-300"  >SOROCABA</Td>
               <Td className="text-zinc-300"  >230 m2</Td>
               <Td className="text-zinc-300"  ><Status color="red">ABERTO</Status></Td>
-              <Td className="text-zinc-300"  ><Button colorScheme="teal" isDisabled={false} >PREENCHER</Button></Td>
+              <Td className="text-zinc-300"  ><Button  onClick={()=> setFormIsTrue(false)} colorScheme="teal" isDisabled={false} >PREENCHER</Button></Td>
             </Tr>
             <Tr>
               <Td className="text-zinc-300"  >SALA COMERCIAL</Td>
               <Td className="text-zinc-300"  >SANTO ANDRÉ</Td>
               <Td className="text-zinc-300"  >84 m2</Td>
               <Td className="text-zinc-300"  ><Status color="red">ABERTO</Status></Td>
-              <Td className="text-zinc-300"  ><Button colorScheme="teal" isDisabled={false} >PREENCHER</Button></Td>
+              <Td className="text-zinc-300"  ><Button onClick={()=> setFormIsTrue(false)} colorScheme="teal" isDisabled={false} >PREENCHER</Button></Td>
             </Tr>
           </Tbody>
         </Table>
         <Paginaton />
+        </>
+        :
+        <>
+          <Text mb="4" fontWeight="bold" className="text-zinc-300">FORMULÁRIO</Text>
+          <Forms setFormIsTrue={ setFormIsTrue } />
+        </>
+      }
         </Box>
       </SimpleGrid>
     </Flex>
