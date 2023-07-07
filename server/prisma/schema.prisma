@@ -26,6 +26,6 @@ model ReportReceived {
   contactTwo     String
   registration   String
   iptu           String
-  leadNumber     String
+  leadNumber     String @unique
   guaranteeValue String
 }
