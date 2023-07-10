@@ -1,6 +1,8 @@
+'use client'
 import { Sidebar } from "@/components/Sidebar";
 import { Flex, SimpleGrid, Box, Text,  } from "@chakra-ui/react";
 import { Charts } from "@/components/Charts";
+
 export default function Home() {
 
   return (
