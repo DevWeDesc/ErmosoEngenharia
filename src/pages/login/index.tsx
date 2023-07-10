@@ -32,9 +32,11 @@ export default function Login() {
 
 async function handleLogin(data: SignInProps) {
   
-try {
-  await api.post("/login", data).then((res) => {
+  try {
+    await api.post("/login", data).then((res) => {
+    console.log(data, 'dto')
    if(res.status === 200) {
+    console.log(res, 'result')
     Cookies.set("token", res.data.token, {expires: 1})
     toast.success("Realizando login")
     route.push("/home")
