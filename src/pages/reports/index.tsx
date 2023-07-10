@@ -15,14 +15,13 @@ export default function Reports() {
 
   return (
 <Flex direction="column" minH="80vh">
-    <Flex w="100%" my="6" maxWidth={1480} mx="auto" px="6">
+    <Flex w="100%" my="6" maxWidth={1480} mx="auto" px="6" className="text-xs	">
       <Sidebar />
       <SimpleGrid flex='1' gap="4" minChildWidth="320px" alignItems="flex-start" >
         <Box
-        p="8"
+        p="6"
         textAlign="center"
-        className="bg-slate-900
-        "
+        className="bg-slate-900"
         rounded="8"
         minHeight="320px"
         m="2"
@@ -34,35 +33,62 @@ export default function Reports() {
         <Text mb="4" fontWeight="bold" className="text-zinc-300">LAUDOS ABERTOS</Text>
         <Table colorScheme="whatsapp">
           <Thead  >
-            <Tr >
-              <Th color="gray.300" >TIPO DE IMÓVEL</Th>
-              <Th color="gray.300" >REGIÃO</Th>
-              <Th color="gray.300" >ÁREA PRIVADA</Th>
+            <Tr>
+              <Th color="gray.300" >NOME DO CLIENTE</Th>
+              <Th color="gray.300" >ENDEREÇO</Th>
+              <Th color="gray.300" >CONTATOS</Th>
+              <Th color="gray.300" >MATRICULA</Th>
+              <Th color="gray.300" >IPTU</Th>
+              <Th color="gray.300" >LEAD</Th>
+              <Th color="gray.300" >VALOR DA GARANTIA</Th>
               <Th color="gray.300" >STATUS</Th>
-              <Th color="gray.300" >Concluir</Th>
+              <Th color="gray.300" >FORMULÁRIO</Th>
+
+              
             </Tr>
           </Thead>
           <Tbody>
             <Tr>
-              <Td className="text-zinc-300"  >APARTAMENTO</Td>
-              <Td className="text-zinc-300"  >SÃO PAULO</Td>
-              <Td className="text-zinc-300"  >150 m2</Td>
-              <Td className="text-zinc-300"  ><Status color="yellow">FINALIZANDO</Status></Td>
-              <Td className="text-zinc-300"  ><Button colorScheme="teal" isDisabled={true} >PREENCHER</Button></Td>
+              <Td className="text-zinc-300">FULANDO SILVA LOPES</Td>
+              <Td className="text-zinc-300">AVENIDA PAULISTA, 254</Td>
+              <Td className="text-zinc-300 !p-2">
+                <Flex>(11) 4455-6677</Flex>
+                <Flex>(11) 4455-6677</Flex>
+              </Td>
+              <Td className="text-zinc-300">9999999</Td>
+              <Td className="text-zinc-300">88888888</Td>
+              <Td className="text-zinc-300">88888888</Td>
+              <Td className="text-zinc-300">200.000,00</Td>
+              <Td className="text-zinc-300"><Status color="yellow">FINALIZANDO</Status></Td>
+              <Td className="text-zinc-300"><Button colorScheme="teal" isDisabled={true} >PREENCHER</Button></Td>
             </Tr>
             <Tr>
-              <Td className="text-zinc-300"  >CASA</Td>
-              <Td className="text-zinc-300"  >SOROCABA</Td>
-              <Td className="text-zinc-300"  >230 m2</Td>
-              <Td className="text-zinc-300"  ><Status color="red">ABERTO</Status></Td>
-              <Td className="text-zinc-300"  ><Button  onClick={()=> setFormIsTrue(false)} colorScheme="teal" isDisabled={false} >PREENCHER</Button></Td>
+              <Td className="text-zinc-300">FULANDO SILVA LOPES</Td>
+              <Td className="text-zinc-300">AVENIDA PAULISTA, 254</Td>
+              <Td className="text-zinc-300 !p-2">
+                <Flex>(11) 4455-6677</Flex>
+                <Flex>(11) 4455-6677</Flex>
+              </Td>
+              <Td className="text-zinc-300">9999999</Td>
+              <Td className="text-zinc-300">88888888</Td>
+              <Td className="text-zinc-300">88888888</Td>
+              <Td className="text-zinc-300">200.000,00</Td>
+              <Td className="text-zinc-300"><Status color="yellow">ABERTO</Status></Td>
+              <Td className="text-zinc-300"><Button  onClick={()=> setFormIsTrue(false)} colorScheme="teal" isDisabled={false} >PREENCHER</Button></Td>
             </Tr>
             <Tr>
-              <Td className="text-zinc-300"  >SALA COMERCIAL</Td>
-              <Td className="text-zinc-300"  >SANTO ANDRÉ</Td>
-              <Td className="text-zinc-300"  >84 m2</Td>
-              <Td className="text-zinc-300"  ><Status color="red">ABERTO</Status></Td>
-              <Td className="text-zinc-300"  ><Button onClick={()=> setFormIsTrue(false)} colorScheme="teal" isDisabled={false} >PREENCHER</Button></Td>
+              <Td className="text-zinc-300">FULANDO SILVA LOPES</Td>
+              <Td className="text-zinc-300">AVENIDA PAULISTA, 254</Td>
+              <Td className="text-zinc-300 !p-2">
+                <Flex>(11) 4455-6677</Flex>
+                <Flex>(11) 4455-6677</Flex>
+              </Td>
+              <Td className="text-zinc-300">9999999</Td>
+              <Td className="text-zinc-300">88888888</Td>
+              <Td className="text-zinc-300">88888888</Td>
+              <Td className="text-zinc-300">200.000,00</Td>
+              <Td className="text-zinc-300"><Status color="yellow">ABERTO</Status></Td>
+              <Td className="text-zinc-300"><Button  onClick={()=> setFormIsTrue(false)} colorScheme="teal" isDisabled={false} >PREENCHER</Button></Td>
             </Tr>
           </Tbody>
         </Table>
