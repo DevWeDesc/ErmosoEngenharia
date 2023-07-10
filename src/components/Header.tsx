@@ -1,18 +1,20 @@
+'use client'
 import { HStack, Button, Flex, Text, Icon } from '@chakra-ui/react'
 import logo from '../../public/hermosoLogo.png'
 import Image from 'next/image'
 import { RiNotificationLine, RiUserAddLine } from 'react-icons/ri'
 import { useRouter } from 'next/router'
 import { toast } from 'react-toastify'
+import Cookies from 'js-cookie'
 
 export function Header() {
   const {asPath, pathname} = useRouter()
-  if(pathname === "/") {
+  if(pathname === "/" || pathname === "/login") {
     return null;
   }
   const{push} = useRouter()  
-  const handleLogOut = () => {
-     localStorage.removeItem("token");
+   const handleLogOut = () => {
+     Cookies.remove("token");
       push('/')
       toast.warning('Saindo !!',{ theme: 'dark'})
   }
