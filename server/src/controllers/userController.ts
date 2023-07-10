@@ -35,7 +35,7 @@ export const userController = {
       return
     }
 
-    const user = await prisma.user.create({
+    await prisma.user.create({
       data: { email, password: hashedPassword, username, roles}
     })
     reply.status(201).send("USUÁRIO CRIADO COM SUCESSO")
