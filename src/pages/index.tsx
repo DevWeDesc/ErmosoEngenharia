@@ -1,11 +1,14 @@
 import Image from "next/image";
 import { useForm, SubmitHandler, FieldValues } from "react-hook-form";
-import logo from "../../public/hermosoLogo.png";
 import { Input } from "@/components/Input";
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { useContext } from "react";
-import { AuthContext } from "@/contexts/AuthContext";
+//@ts-ignore
+import logo from "../../public/hermosoLogo.png";
+import { api } from "@/services/api";
+import { toast } from "react-toastify";
+import { useRouter } from "next/router";
+
 
 
 interface SignInProps {
@@ -21,17 +24,35 @@ const SignInSchema = yup.object().shape({
 
 
 export default function Login() {
-  const {signIn} = useContext(AuthContext)
   const { register, handleSubmit, formState: {errors},} = useForm({
     resolver: yupResolver(SignInSchema)
   })
+  const route = useRouter()
 
-  const  handleSignIn: SubmitHandler<SignInProps> = async (values) => {
-  const data = {
-    email: values.email,
-    password: values.password
+
+async function handleLogin(data: SignInProps) {
+try {
+  await api.post("/login", data).then((res) => {
+   if(res.status === 200) {
+    localStorage.setItem("token", res.data.token)
+    toast.success("Realizando login")
+    route.push("/home")
+   } else {
+    toast.error("Falha ao fazer login")
+   }
+})
+} catch (error) {
+  toast.error("Falha ao fazer Login")
+}
+
+ 
   }
-  await signIn(data)
+  const  handleSignIn: SubmitHandler<SignInProps> = async (values) => {
+    const data = {
+      email: values.email,
+      password: values.password
+    }
+    handleLogin(data)
   }
   return (
     <main className="w-screen h-screen  flex justify-center items-center">

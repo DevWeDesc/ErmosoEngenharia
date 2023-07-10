@@ -12,6 +12,7 @@ export function Header() {
   }
   const{push} = useRouter()  
   const handleLogOut = () => {
+     localStorage.removeItem("token");
       push('/')
       toast.warning('Saindo !!',{ theme: 'dark'})
   }
