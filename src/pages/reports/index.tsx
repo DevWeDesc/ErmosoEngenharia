@@ -14,7 +14,7 @@ export default function Reports() {
   const [ formIsTrue, setFormIsTrue ] = useState<boolean>(true)
 
   return (
-<Flex direction="column" h="80vh">
+<Flex direction="column" minH="80vh">
     <Flex w="100%" my="6" maxWidth={1480} mx="auto" px="6">
       <Sidebar />
       <SimpleGrid flex='1' gap="4" minChildWidth="320px" alignItems="flex-start" >

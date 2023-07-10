@@ -1,11 +1,11 @@
 import { Button, Flex, FormControl, FormLabel, Select, Text  } from "@chakra-ui/react";
 import { Input } from "@/components/Input"
-import React, { Dispatch, SetStateAction } from 'react';
+import React, { Dispatch, SetStateAction, useState } from 'react';
 import { AiOutlineCloudUpload } from 'react-icons/ai'
 import * as yup from 'yup'
-import { useForm, SubmitHandler, FieldValues } from "react-hook-form";
+import { useForm, SubmitHandler, FieldValues, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-
+import DatePicker from 'react-datepicker';
 interface IProps {
   setFormIsTrue: Dispatch<SetStateAction<boolean>>;
 }
@@ -61,10 +61,10 @@ const FormSchema = yup.object().shape({
   state: yup.string().required('Estado Obrigatório'),
   cep: yup.string().required('CEP Obrigatório'),
   propertyType: yup.string().required('Tipo de Propriedade Obrigatória'),
-  condominium: yup.string().required('Condomínio  Obrigatório'),
+  condominium: yup.string(),
   apparentAge: yup.string().required('Idade Aparente Obrigatória'),
   standard: yup.string().required('Padrão Obrigatório'),
-  conservationState: yup.number().required('Estado de Conservação Obrigatório'),
+  conservationState: yup.string().required('Estado de Conservação Obrigatório'),
   usefulArea: yup.string().required('Área Útil Obrigatória'),
   homogenizedArea: yup.string().required('Área Homogeneizada Obrigatória'),
   landArea: yup.string().required('Área de Terreno Obrigatório'),
@@ -75,7 +75,9 @@ const FormSchema = yup.object().shape({
 
 export default function Forms({ setFormIsTrue }: IProps) {
 
-  const { register, handleSubmit, formState: {errors},} = useForm({
+  const [ condIsTrue, setCondIsTrue ] = useState<boolean>(true)
+
+  const { register, handleSubmit, control  , formState: {errors},} = useForm({
     resolver: yupResolver(FormSchema)
   })
 
@@ -101,6 +103,14 @@ export default function Forms({ setFormIsTrue }: IProps) {
       reportDate:  values.reportDate
     }
     console.log(values)
+  }
+
+  const mostrarCampo = (value: string)=> {
+    if(value !== 'casa'){
+      setCondIsTrue(false)
+    }else{
+      setCondIsTrue(true)
+    }
   }
 
   return (
@@ -177,46 +187,136 @@ export default function Forms({ setFormIsTrue }: IProps) {
         minWidth={320}
         height={8} 
         bgColor="gray.700" 
-        color="white" 
+        className="text-slate-400"
         name="propertyType"
         id="propertyType"
+        onChange={ (event)=> mostrarCampo(event.target.value)}
       >
-        <option value="apto cobertura">apto cobertura</option>
-        <option value="cobertura">apto duplex</option>
-        <option value="casa">casa</option>
+        <option className="!bg-slate-600" value="casa">casa</option>
+        <option className="!bg-slate-600" value="apto cobertura">apto cobertura</option>
+        <option className="!bg-slate-600" value="cobertura">apto duplex</option>
       </Select>
+
+      
+      </Flex>
+      <Input
+        placeholder="Paulista Garden"
+        label="Condominío"
+        {...register('condominium')}
+        name="condominium"
+        id="condominium"
+        isDisabled={ condIsTrue }
+        error={errors.condominium}
+      />
       </Flex>
 
+      <Flex gap="4" p="4">
+      <Input
+        placeholder="14 anos"
+        label="Idade aparente"
+        {...register('apparentAge')}
+        name="apparentAge"
+        id="apparentAge"
+        error={errors.apparentAge}
+      />
+      <Input
+        placeholder="Comercial"
+        label="Padrão"
+        {...register('standard')}
+        name="standard"
+        id="standard"
+        error={errors.standard}
+      />
+      <Input
+        placeholder="Conservado"
+        label="Estado de conservação"
+        {...register('conservationState')}
+        name="conservationState"
+        id="conservationState"
+        error={errors.conservationState}
+      />
       </Flex>
-      <Button
-        type="submit"
-        colorScheme="whatsapp"
-      >
-         Enviar
-      </Button>
-    </FormControl>
+
+      <Flex gap="4" p="4">
+      <Input
+        label="Área útil"
+        {...register('usefulArea')}
+        placeholder="110 m²"
+        name="usefulArea"
+        id="usefulArea"
+        error={errors.usefulArea}
+      />
+      <Input
+        placeholder="150 m²"
+        label="Área homogeneizada"
+        {...register('homogenizedArea')}
+        name="homogenizedArea"
+        id="homogenizedArea"
+        error={errors.homogenizedArea}
+      />
+      <Input
+        placeholder="300 m²"
+        label="Área de terreno"
+        {...register('landArea')}
+        name="landArea"
+        id="landArea"
+        error={errors.landArea}
+      />
+      </Flex>
+      <Flex gap="4" p="4">
+      <Input
+        label="Vagas"
+        {...register('vacancies')}
+        placeholder="02"
+        name="vacancies"
+        id="vacancies"
+        error={errors.vacancies}
+      />
+      <Input
+        placeholder="R$ 300.000,00"
+        label="Valor"
+        {...register('value')}
+        name="value"
+        id="value"
+        error={errors.value}
+      />
+      <Input
+        placeholder="Data do laudo"
+        label="Data do laudo"
+        type="data"
+        {...register('reportDate')}
+        name="reportDate"
+        id="reportDate"
+        error={errors.reportDate}
+      />
+      </Flex>
 
         <Flex m="6" gap="6" align="center" justify="center">
-          <Flex>
-            <FormLabel display="flex" gap="2" width="100%" height="100%" htmlFor="file">
-            <AiOutlineCloudUpload fontSize="28px" color="white"/>
-            <Input
-              hidden
-              name="file"
-              id="file"
-              className="bg-slate-500 text-slate-500 pt-1"
-              placeholder=''
-              type="file"
+            <FormLabel display="flex" htmlFor="file" width="200px">
+              <AiOutlineCloudUpload className="w-[100px]" fontSize="80px" color="white" />
+              <Input
+                hidden
+                name="file"
+                id="file"
+                className="bg-slate-500 text-slate-500 pt-1 !w-1"
+                type="file"
               />
-              <Text width="100px" className="text-zinc-300">UPLOAD PDF</Text>
-              </FormLabel>
-            </Flex>
+              <Text width="400px" display="flex" alignItems="center" className="text-zinc-300">UPLOAD PDF</Text>
+            </FormLabel>
+          </Flex>
+
+
+          <Flex gap="6" justifyContent="center">
+            <Button
+              type="submit"
+              colorScheme="whatsapp"
+            >
+              Enviar
+            </Button>
+            <Button colorScheme="teal" onClick={()=> setFormIsTrue(true) }>VOLTAR</Button>
           </Flex>
       
-      <Flex gap="6" justifyContent="center">
-        <Button colorScheme="teal" onClick={()=> setFormIsTrue(true) }>VOLTAR</Button>
-        <Button colorScheme="teal" isDisabled={false} >ENVIAR</Button>
-      </Flex>
+    </FormControl>
 
     </>
     
