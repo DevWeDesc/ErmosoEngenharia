@@ -5,16 +5,15 @@ import Image from 'next/image'
 import { RiNotificationLine, RiUserAddLine } from 'react-icons/ri'
 import { useRouter } from 'next/router'
 import { toast } from 'react-toastify'
-import Cookies from 'js-cookie'
 
 export function Header() {
+  
   const {asPath, pathname} = useRouter()
   if(pathname === "/" || pathname === "/login") {
     return null;
   }
   const{push} = useRouter()  
    const handleLogOut = () => {
-     Cookies.remove("token");
       push('/')
       toast.warning('Saindo !!',{ theme: 'dark'})
   }
@@ -50,10 +49,10 @@ export function Header() {
       >
         <Flex m="2" p="2" direction="column">
           <Text fontSize="sm" className="text-zinc-200">
-            Dilan lopez
+          Dilan
           </Text>
           <Text fontSize="sm" className="text-zinc-200">
-            Dilanlopez009@gmail.com
+            dilan@dilan.com.br
           </Text>
         </Flex>
 

@@ -11,15 +11,11 @@ export default function App({ Component, pageProps }: AppProps) {
 
   return (
     <ChakraProvider>
-
-
-    
-      <Header />
-      <Component {...pageProps} />
-      <Footer />
-      
-
-    </ChakraProvider>
+    <Header />
+    <Component {...pageProps} />
+    <Footer />
+    <ToastContainer  autoClose={3000}/>
+  </ChakraProvider>
   
   )
 }

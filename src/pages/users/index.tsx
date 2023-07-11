@@ -1,11 +1,17 @@
 import { Header } from "@/components/Header";
 import { Paginaton } from "@/components/Pagination";
+import Register from "@/components/Register";
 import { Sidebar } from "@/components/Sidebar";
 import { Flex, SimpleGrid, Box, Table, Thead, Th, Tr, Tbody, Td, Button, Heading, Icon, Link } from "@chakra-ui/react";
+import { useState } from "react";
 import { RiAddLine, RiPencilLine } from "react-icons/ri";
 export default function Users() {
+
+  const [ registerIsTrue, setRegisterIsTrue ] = useState<boolean>(true)
+
   return (
-<Flex direction="column"h="80vh">
+
+<Flex direction="column" minH="80vh">
     <Flex w="100%" my="6" maxWidth={1480} mx="auto" px="6">
       <Sidebar />
       <SimpleGrid flex='1' gap="4" minChildWidth="320px" alignItems="flex-start" >
@@ -18,20 +24,17 @@ export default function Users() {
         minHeight="320px"
         m="2"
         >
+    {registerIsTrue ?
+      <>
         <Flex mb="8" justify="space-between" align="center" direction="column">
           <Flex m="2" align="center" w="100%" justify='space-between'>
-          <Heading className="text-zinc-300" size="lg" fontWeight="normal">Usúarios</Heading>
-            <Link href='/users'>
-              <Button as="a"size="sm" fontSize="sm" colorScheme="green"
+            <Heading className="text-zinc-300" size="lg" fontWeight="normal">Usúarios</Heading>
+              <Button size="sm" fontSize="sm" onClick={ ()=> setRegisterIsTrue(false)} colorScheme="green"
               leftIcon={<Icon as={RiAddLine}/>}
               >
-                  Criar novo
+                Criar novo
               </Button>
-            </Link>
-          </Flex>
-             
-              
-            
+          </Flex> 
         <Table colorScheme="whatsapp">
           <Thead  >
             <Tr >
@@ -53,10 +56,11 @@ export default function Users() {
 
           </Tbody>
         </Table>
-
         </Flex>
         <Paginaton/>
-        </Box>
+      </>
+    : <Register setRegisterIsTrue={setRegisterIsTrue} /> }
+      </Box>
        
       </SimpleGrid>
       
