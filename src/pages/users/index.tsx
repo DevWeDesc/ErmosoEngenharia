@@ -9,6 +9,10 @@ export default function Users() {
 
   const [ registerIsTrue, setRegisterIsTrue ] = useState<boolean>(true)
 
+  async function handleVerifyRole(){
+    setRegisterIsTrue(false)
+  }
+
   return (
 
 <Flex direction="column" minH="80vh">
@@ -29,7 +33,7 @@ export default function Users() {
         <Flex mb="8" justify="space-between" align="center" direction="column">
           <Flex m="2" align="center" w="100%" justify='space-between'>
             <Heading className="text-zinc-300" size="lg" fontWeight="normal">Usúarios</Heading>
-              <Button size="sm" fontSize="sm" onClick={ ()=> setRegisterIsTrue(false)} colorScheme="green"
+              <Button size="sm" fontSize="sm" onClick={ ()=> handleVerifyRole()} colorScheme="green"
               leftIcon={<Icon as={RiAddLine}/>}
               >
                 Criar novo
