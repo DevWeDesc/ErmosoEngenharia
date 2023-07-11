@@ -15,13 +15,13 @@ export default function Reports() {
 
   return (
 <Flex direction="column" minH="80vh">
-    <Flex w="100%" my="6" maxWidth={1480} mx="auto" px="6" className="text-xs	">
+    <Flex w="100%" my="6" maxWidth={1480} mx="auto" px="6">
       <Sidebar />
       <SimpleGrid flex='1' gap="4" minChildWidth="320px" alignItems="flex-start" >
         <Box
         p="6"
         textAlign="center"
-        className="bg-slate-900"
+        className="bg-slate-900 text-xs"
         rounded="8"
         minHeight="320px"
         m="2"

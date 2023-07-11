@@ -3,13 +3,12 @@ import { Input } from "@/components/Input"
 import React, { Dispatch, SetStateAction, useState } from 'react';
 import { AiOutlineCloudUpload } from 'react-icons/ai'
 import * as yup from 'yup'
-import { useForm, SubmitHandler, FieldValues, Controller } from "react-hook-form";
+import { useForm, SubmitHandler, FieldValues } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import DatePicker from 'react-datepicker';
+
 interface IProps {
   setFormIsTrue: Dispatch<SetStateAction<boolean>>;
 }
-
 
 interface FormProps {
   adress: string;
@@ -59,7 +58,7 @@ export default function Forms({ setFormIsTrue }: IProps) {
 
   const [ condIsTrue, setCondIsTrue ] = useState<boolean>(true)
 
-  const { register, handleSubmit, control  , formState: {errors},} = useForm({
+  const { register, handleSubmit, formState: {errors},} = useForm({
     resolver: yupResolver(FormSchema)
   })
 
@@ -85,7 +84,7 @@ export default function Forms({ setFormIsTrue }: IProps) {
       value:  values.value,
       reportDate:  values.reportDate
     }
-    console.log(values)
+    console.log(data)
   }
 
   const mostrarCampo = (value: string)=> {
