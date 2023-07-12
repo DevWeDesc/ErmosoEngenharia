@@ -40,10 +40,11 @@ export class ValidationContract {
 
     public async reportAlreadyExist(value: string, message: string) {
       const report = await prisma.reportReceived.findUnique({
+        //@ts-ignore
         where: {leadNumber: value}
       })
 
-      if(report ) {
+      if(report) {
           this.errors.push(message)
       }
     }

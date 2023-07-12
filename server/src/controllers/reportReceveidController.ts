@@ -40,4 +40,18 @@ export const reportReceveid = {
         reply.send({message: error}).status(404)
     }
   },
+
+
+  getReceveidsReports: async (request: FastifyRequest, reply: FastifyReply) => {
+    try {
+        const reports = await prisma.reportReceived.findMany({
+          where: {status: {contains: "open"}}
+        })
+
+        reply.send(reports).status(200)
+    } catch (error) {
+      console.log(error)
+      reply.send({message: error}).status(404)
+    }
+  }
 };

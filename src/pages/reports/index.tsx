@@ -1,17 +1,45 @@
+'use client'
 import Forms from "@/components/Forms";
-import { Header } from "@/components/Header";
 import { Paginaton } from "@/components/Pagination";
 import { Sidebar } from "@/components/Sidebar";
+import { api } from "@/services/api";
 import { Flex, SimpleGrid, Box, Text,  Table, Thead, Th, Tr, Tbody, Td, Button, Input } from "@chakra-ui/react";
 import dynamic from "next/dynamic";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 
+
+
+interface ReportsProps {
+    id: string | number; 
+	customerName: string;
+		   address: string;
+		contactOne: string;
+		contactTwo: string;
+	registration: string;
+		      iptu: string;
+		leadNumber: string;
+guaranteeValue: string;
+	      status: string;
+}
 const Status = dynamic(() => import("./styles").then((mod) => mod.Status), {
   ssr: false,
 });
 export default function Reports() {
   const [ formIsTrue, setFormIsTrue ] = useState<boolean>(true)
+  const [reports, setReports] = useState<ReportsProps[]>([])
+
+    async function GetOpenReports() {
+      await api.get("/reports").then((res) => {
+        setReports(res.data)
+      }).catch((err) => {
+        console.log(err)
+      })
+    }
+
+    useEffect(() => {
+      GetOpenReports()
+    },[])
 
   return (
 <Flex direction="column" minH="80vh">
@@ -48,48 +76,25 @@ export default function Reports() {
             </Tr>
           </Thead>
           <Tbody>
-            <Tr>
-              <Td className="text-zinc-300">FULANDO SILVA LOPES</Td>
-              <Td className="text-zinc-300">AVENIDA PAULISTA, 254</Td>
-              <Td className="text-zinc-300 !p-2">
-                <Flex>(11) 4455-6677</Flex>
-                <Flex>(11) 4455-6677</Flex>
-              </Td>
-              <Td className="text-zinc-300">9999999</Td>
-              <Td className="text-zinc-300">88888888</Td>
-              <Td className="text-zinc-300">88888888</Td>
-              <Td className="text-zinc-300">200.000,00</Td>
-              <Td className="text-zinc-300"><Status color="yellow">FINALIZANDO</Status></Td>
-              <Td className="text-zinc-300"><Button colorScheme="teal" isDisabled={true} >PREENCHER</Button></Td>
-            </Tr>
-            <Tr>
-              <Td className="text-zinc-300">FULANDO SILVA LOPES</Td>
-              <Td className="text-zinc-300">AVENIDA PAULISTA, 254</Td>
-              <Td className="text-zinc-300 !p-2">
-                <Flex>(11) 4455-6677</Flex>
-                <Flex>(11) 4455-6677</Flex>
-              </Td>
-              <Td className="text-zinc-300">9999999</Td>
-              <Td className="text-zinc-300">88888888</Td>
-              <Td className="text-zinc-300">88888888</Td>
-              <Td className="text-zinc-300">200.000,00</Td>
-              <Td className="text-zinc-300"><Status color="yellow">ABERTO</Status></Td>
-              <Td className="text-zinc-300"><Button  onClick={()=> setFormIsTrue(false)} colorScheme="teal" isDisabled={false} >PREENCHER</Button></Td>
-            </Tr>
-            <Tr>
-              <Td className="text-zinc-300">FULANDO SILVA LOPES</Td>
-              <Td className="text-zinc-300">AVENIDA PAULISTA, 254</Td>
-              <Td className="text-zinc-300 !p-2">
-                <Flex>(11) 4455-6677</Flex>
-                <Flex>(11) 4455-6677</Flex>
-              </Td>
-              <Td className="text-zinc-300">9999999</Td>
-              <Td className="text-zinc-300">88888888</Td>
-              <Td className="text-zinc-300">88888888</Td>
-              <Td className="text-zinc-300">200.000,00</Td>
-              <Td className="text-zinc-300"><Status color="yellow">ABERTO</Status></Td>
-              <Td className="text-zinc-300"><Button  onClick={()=> setFormIsTrue(false)} colorScheme="teal" isDisabled={false} >PREENCHER</Button></Td>
-            </Tr>
+            {
+              reports.map((report) => (
+                <Tr key={report.id}>
+                <Td className="text-zinc-300">{report.customerName}</Td>
+                <Td className="text-zinc-300">{report.address}</Td>
+                <Td className="text-zinc-300 !p-2">
+                  <Flex>{report.contactOne}</Flex>
+                  <Flex>{report.contactTwo}</Flex>
+                </Td>
+                <Td className="text-zinc-300">{report.registration}</Td>
+                <Td className="text-zinc-300">{report.iptu}</Td>
+                <Td className="text-zinc-300">{report.leadNumber}</Td>
+                <Td className="text-zinc-300">{report.guaranteeValue}</Td>
+                <Td className="text-zinc-300">{report.status === "open" ? <Status color="yellow">ABERTO</Status> : <Status color="red">FECHADO</Status>}</Td>
+                <Td className="text-zinc-300"><Button  onClick={()=> setFormIsTrue(false)} colorScheme="teal" isDisabled={false} >PREENCHER</Button></Td>
+              </Tr>
+              )) 
+            }
+   
           </Tbody>
         </Table>
         <Paginaton />
