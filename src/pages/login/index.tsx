@@ -1,3 +1,4 @@
+'use client'
 import Image from "next/image";
 import { useForm, SubmitHandler, FieldValues } from "react-hook-form";
 import { Input } from "@/components/Input";

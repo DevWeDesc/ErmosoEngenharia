@@ -1,3 +1,4 @@
+'use client'
 import { Header } from "@/components/Header";
 import { Paginaton } from "@/components/Pagination";
 import { Sidebar } from "@/components/Sidebar";

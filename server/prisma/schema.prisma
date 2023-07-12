@@ -15,17 +15,18 @@ model User {
   email    String   @unique
   password String
   username String?
-  roles    String[] @default(["admin", "user"])
+  roles    String[] @default(["user"])
 }
 
 model ReportReceived {
-  id             Int    @id @default(autoincrement())
+  id             Int     @id @default(autoincrement())
   customerName   String
   address        String
   contactOne     String
   contactTwo     String
   registration   String
   iptu           String
-  leadNumber     String @unique
+  leadNumber     String  @unique
   guaranteeValue String
+  status         String?
 }
