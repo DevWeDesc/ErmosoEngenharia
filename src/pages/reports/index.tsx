@@ -23,7 +23,6 @@ const Status = dynamic(() => import("./styles").then((mod) => mod.Status), {
   ssr: false,
 });
 export default function Reports() {
-  const [ formIsTrue, setFormIsTrue ] = useState<boolean>(true)
   const [reports, setReports] = useState<ReportsProps[]>([])
 
   const router = useRouter()

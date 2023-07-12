@@ -7,9 +7,6 @@ import * as yup from 'yup'
 import { useForm, SubmitHandler, FieldValues } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 
-interface IProps {
-  setFormIsTrue: Dispatch<SetStateAction<boolean>>;
-}
 
 interface FormProps {
   adress: string;
@@ -55,7 +52,7 @@ const FormSchema = yup.object().shape({
   reportDate: yup.string().required('Data do Laudo Obrigatório'),
 })
 
-export default function Forms({ setFormIsTrue }: IProps) {
+export default function Forms() {
 
   const router = useRouter();
   const { leadNumber } = router.query;
