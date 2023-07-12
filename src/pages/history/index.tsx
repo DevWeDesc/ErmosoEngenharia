@@ -2,12 +2,46 @@
 import { Header } from "@/components/Header";
 import { Paginaton } from "@/components/Pagination";
 import { Sidebar } from "@/components/Sidebar";
+import { api } from "@/services/api";
 import { Flex, SimpleGrid, Box, Text,  Table, Thead, Th, Tr, Tbody, Td, Button } from "@chakra-ui/react";
 import dynamic from "next/dynamic";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
+
 const Status = dynamic(() => import("../reports/styles").then((mod) => mod.Status), {
   ssr: false,
 });
+
+interface ReportsProps {
+id: string | number; 
+customerName: string;
+address: string;
+contactOne: string;
+contactTwo: string;
+registration: string;
+iptu: string;
+leadNumber: string;
+guaranteeValue: string;
+status: string;
+}
+
 export default function History() {
+
+  const router = useRouter()
+
+  const [closeReports, setCloseReports ] = useState<ReportsProps[]>([])
+
+  async function GetCloseReports() {
+    await api.get("/closereports").then((res)=> {
+      setCloseReports(res.data)
+    }).catch((err)=> {
+      console.log(err)
+    } )
+  }
+
+  useEffect(() => {
+    GetCloseReports()
+  },[])
 
   return (
 <Flex direction="column" h="80vh">
@@ -27,36 +61,25 @@ export default function History() {
         <Table colorScheme="whatsapp">
           <Thead  >
             <Tr >
-              <Th color="gray.300" >TIPO DE IMÓVEL</Th>
-              <Th color="gray.300" >REGIÃO</Th>
-              <Th color="gray.300" >ÁREA PRIVADA</Th>
+              <Th color="gray.300" >NOME DO CLIENTE</Th>
+              <Th color="gray.300" >MATRICULA</Th>
+              <Th color="gray.300" >LEAD</Th>
               <Th color="gray.300" >STATUS</Th>
               <Th color="gray.300" >Concluir</Th>
             </Tr>
           </Thead>
           <Tbody>
-            <Tr>
-              <Td className="text-zinc-300"  >APARTAMENTO</Td>
-              <Td className="text-zinc-300"  >SÃO BERNARDO</Td>
-              <Td className="text-zinc-300"  >140 m2</Td>
-              <Td className="text-zinc-300"  ><Status color="green">FINALIZADO</Status></Td>
-              <Td className="text-zinc-300"  ><Button colorScheme="yellow" isDisabled={false} >DETALHES</Button></Td>
-            </Tr>
-            <Tr>
-              <Td className="text-zinc-300"  >SALA COMERCIAL</Td>
-              <Td className="text-zinc-300"  >SOROCABA</Td>
-              <Td className="text-zinc-300"  >78 m2</Td>
-              <Td className="text-zinc-300"  ><Status color="green">FINALIZADO</Status></Td>
-              <Td className="text-zinc-300"  ><Button colorScheme="yellow" isDisabled={false} >DETALHES</Button></Td>
-            </Tr>
-            <Tr>
-              <Td className="text-zinc-300"  >CASA</Td>
-              <Td className="text-zinc-300"  >MINAS GERAIS</Td>
-              <Td className="text-zinc-300"  >180 m2</Td>
-              <Td className="text-zinc-300"  ><Status color="green">FINALIZADO</Status></Td>
-              <Td className="text-zinc-300"  ><Button colorScheme="yellow" isDisabled={false} >DETALHES</Button></Td>
-            </Tr>
-    
+            {
+              closeReports.map((report)=> (
+                <Tr key={ report.id}>
+                  <Td className="text-zinc-300">{report.customerName}</Td>
+                  <Td className="text-zinc-300">{report.registration}</Td>
+                  <Td className="text-zinc-300">{report.leadNumber}</Td>
+                  <Td className="text-zinc-300"><Status color="green">FECHADO</Status></Td>
+                  <Td className="text-zinc-300"><Button colorScheme="yellow" onClick={ ()=> router.push(`/history/${report.leadNumber}`)} >DETALHES</Button></Td>
+                </Tr>
+              ))
+            }
           </Tbody>
         </Table>
 

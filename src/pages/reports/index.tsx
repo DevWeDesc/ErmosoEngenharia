@@ -23,22 +23,22 @@ const Status = dynamic(() => import("./styles").then((mod) => mod.Status), {
   ssr: false,
 });
 export default function Reports() {
-  const [reports, setReports] = useState<ReportsProps[]>([])
-
+  
   const router = useRouter()
 
-    async function GetOpenReports() {
-      await api.get("/reports").then((res) => {
-        console.log(res.data)
-        setReports(res.data)
-      }).catch((err) => {
-        console.log(err)
-      })
-    }
+  const [reports, setReports] = useState<ReportsProps[]>([])
 
-    useEffect(() => {
-      GetOpenReports()
-    },[])
+  async function GetOpenReports() {
+    await api.get("/reports").then((res) => {
+      setReports(res.data)
+    }).catch((err) => {
+      console.log(err)
+    })
+  }
+
+  useEffect(() => {
+    GetOpenReports()
+  },[])
 
   return (
 <Flex direction="column" minH="80vh">
@@ -66,8 +66,6 @@ export default function Reports() {
               <Th color="gray.300" >VALOR DA GARANTIA</Th>
               <Th color="gray.300" >STATUS</Th>
               <Th color="gray.300" >FORMULÁRIO</Th>
-
-              
             </Tr>
           </Thead>
           <Tbody>

@@ -56,5 +56,20 @@ export const reportReceveid = {
       console.log(error)
       reply.send({message: error}).status(404)
     }
+  },
+
+  getReceidsReportsClose: async (request: FastifyRequest, reply: FastifyReply) => {
+  try {
+    const reports = await prisma.reportReceived.findMany({
+      // @ts-ignore
+      where: { status: "close" } 
+    });
+    reply.send(reports).status(200);
+  } catch (error) {
+    console.log(error);
+    reply.send({ message: error }).status(404);
   }
+}
+
+
 };
