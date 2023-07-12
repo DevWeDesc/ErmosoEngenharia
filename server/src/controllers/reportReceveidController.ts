@@ -5,6 +5,7 @@ import { ValidationContract } from "../validators/validateContract";
 const prisma = new PrismaClient();
 
 
+
 export const reportReceveid = {
   createNewReport: async (request: FastifyRequest, reply: FastifyReply ) => {
     const ReportSchema = z.object({
@@ -44,7 +45,9 @@ export const reportReceveid = {
 
   getReceveidsReports: async (request: FastifyRequest, reply: FastifyReply) => {
     try {
+      
         const reports = await prisma.reportReceived.findMany({
+          // @ts-ignore
           where: {status: {contains: "open"}}
         })
 

@@ -1,14 +1,11 @@
 'use client'
-import Forms from "@/components/Forms";
 import { Paginaton } from "@/components/Pagination";
 import { Sidebar } from "@/components/Sidebar";
 import { api } from "@/services/api";
 import { Flex, SimpleGrid, Box, Text,  Table, Thead, Th, Tr, Tbody, Td, Button, Input } from "@chakra-ui/react";
 import dynamic from "next/dynamic";
 import { useState, useEffect } from 'react';
-
-
-
+import { useRouter } from 'next/router'
 
 interface ReportsProps {
     id: string | number; 
@@ -29,8 +26,11 @@ export default function Reports() {
   const [ formIsTrue, setFormIsTrue ] = useState<boolean>(true)
   const [reports, setReports] = useState<ReportsProps[]>([])
 
+  const router = useRouter()
+
     async function GetOpenReports() {
       await api.get("/reports").then((res) => {
+        console.log(res.data)
         setReports(res.data)
       }).catch((err) => {
         console.log(err)
@@ -54,10 +54,6 @@ export default function Reports() {
         minHeight="320px"
         m="2"
         >
-        {
-        formIsTrue ?
-        <>
-        
         <Text mb="4" fontWeight="bold" className="text-zinc-300">LAUDOS ABERTOS</Text>
         <Table colorScheme="whatsapp">
           <Thead  >
@@ -90,7 +86,7 @@ export default function Reports() {
                 <Td className="text-zinc-300">{report.leadNumber}</Td>
                 <Td className="text-zinc-300">{report.guaranteeValue}</Td>
                 <Td className="text-zinc-300">{report.status === "open" ? <Status color="yellow">ABERTO</Status> : <Status color="red">FECHADO</Status>}</Td>
-                <Td className="text-zinc-300"><Button  onClick={()=> setFormIsTrue(false)} colorScheme="teal" isDisabled={false} >PREENCHER</Button></Td>
+                <Td className="text-zinc-300"><Button  onClick={()=> router.push(`/reports/${report.leadNumber}`)} colorScheme="teal" isDisabled={false} >PREENCHER</Button></Td>
               </Tr>
               )) 
             }
@@ -98,13 +94,8 @@ export default function Reports() {
           </Tbody>
         </Table>
         <Paginaton />
-        </>
-        :
-        <>
-          <Text mb="4" fontWeight="bold" className="text-zinc-300">FORMULÁRIO</Text>
-          <Forms setFormIsTrue={ setFormIsTrue } />
-        </>
-      }
+        
+        
         </Box>
       </SimpleGrid>
     </Flex>
