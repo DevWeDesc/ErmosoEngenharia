@@ -39,6 +39,7 @@ export default function Register({ setRegisterIsTrue }: IProps) {
       password: values.password,
       role: values.role,
     }
+    console.log(data)
   }
   return (
     <Flex mb="8" justify="space-between" align="center" direction="column">
@@ -90,7 +91,7 @@ export default function Register({ setRegisterIsTrue }: IProps) {
               height={8}
               bgColor="gray.700" 
               className="text-slate-400"
-              name="role"
+              {...register('role')}
               id="role"
             >
               <option className="!bg-slate-600" value="admin">Administrador</option>
