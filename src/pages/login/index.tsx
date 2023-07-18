@@ -36,7 +36,6 @@ async function handleLogin(data: SignInProps) {
   try {
     await api.post("/login", data).then((res) => {
    if(res.status === 200) {
-    console.log(res.data, 'result')
     Cookies.set("token", res.data.token, {expires: 1})
     toast.success("Realizando login")
     route.push("/home")

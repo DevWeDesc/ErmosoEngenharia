@@ -2,16 +2,38 @@ import { Header } from "@/components/Header";
 import { Paginaton } from "@/components/Pagination";
 import Register from "@/components/Register";
 import { Sidebar } from "@/components/Sidebar";
-import { Flex, SimpleGrid, Box, Table, Thead, Th, Tr, Tbody, Td, Button, Heading, Icon, Link } from "@chakra-ui/react";
-import { useState } from "react";
+import { Flex, SimpleGrid, Box, Table, Thead, Th, Tr, Tbody, Td, Button, Heading, Icon } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
+import { api } from "@/services/api"
 import { RiAddLine, RiPencilLine } from "react-icons/ri";
+
+interface ListUsers {
+  id: number;
+  email: string;
+  username: string;
+  roles: string[];
+}
+
 export default function Users() {
 
   const [ registerIsTrue, setRegisterIsTrue ] = useState<boolean>(true)
+  const [ listUsers, setListUsers ] = useState<ListUsers[]>([])
+
+  async function getAllUsers(){
+    await api.get("/users").then((res)=> {
+      setListUsers(res.data)
+    }).catch((err)=> {
+      console.log(err)
+    })
+  }
 
   async function handleVerifyRole(){
     setRegisterIsTrue(false)
   }
+
+  useEffect(() => {
+    getAllUsers()
+  },[])
 
   return (
 
@@ -44,20 +66,22 @@ export default function Users() {
             <Tr >
               <Th color="gray.300" >Usuário</Th>
               <Th color="gray.300" >Email</Th>
-              <Th color="gray.300" >LAUDOS FINALIZADOS</Th>
               <Th color="gray.300" >TIPO DE USUÁRIO</Th>
               <Th color="gray.300" >ATUALIZAR</Th>
             </Tr>
           </Thead>
           <Tbody>
-            <Tr>
-              <Td className="text-zinc-300"  >DILAN</Td>
-              <Td className="text-zinc-300"  >Dilanlopez009@gmail.com</Td>
-              <Td className="text-zinc-300"  >25</Td>
-              <Td className="text-zinc-300"  >ADMINISTRADOR</Td>
-              <Td className="text-zinc-300"  ><Button colorScheme="teal" isDisabled={false} leftIcon={<Icon as={RiPencilLine} fontSize="16" />}> Editar</Button></Td>
-            </Tr>
+            {
+              listUsers.map((user)=> (
+              <Tr key={ user.id }>
+                <Td className="text-zinc-300"  >{ user.username }</Td>
+                <Td className="text-zinc-300"  >{ user.email }</Td>
+                <Td className="text-zinc-300"  >{ user.roles.find((role)=> role.includes('admin')) ? 'ADMINITRADOR' : 'USUARIO' }</Td>
+                <Td className="text-zinc-300"  ><Button colorScheme="teal" isDisabled={false}   leftIcon={<Icon as={RiPencilLine} fontSize="16" />}> Editar</Button></Td>
+              </Tr>
 
+              ))
+            }
           </Tbody>
         </Table>
         </Flex>

@@ -42,7 +42,15 @@ export const userController = {
   },
 
   getUsers: async(request: FastifyRequest, reply: FastifyReply) => {
-    const users = await prisma.user.findMany()
+    const users = await prisma.user.findMany({
+      select: {
+        id: true,
+        email: true,
+        username: true,
+        password: false,
+        roles: true,
+      }
+    })
     reply.send(users)
   },
 
@@ -62,9 +70,21 @@ export const userController = {
         contract.clearErrors()
         return
       } 
-      if(!secret) { return} else {
-        const token = jwt.sign({email}, secret, {expiresIn: "1d"})
-        reply.send({user: user, token: token}).status(200)
+      // if(!secret) { return} else {
+      //   const token = jwt.sign({email}, secret, {expiresIn: "1d"})
+
+      //   reply.send({user: user, token: token}).status(200)
+      // }
+      if(secret && user){
+        const token = jwt.sign({email, username: user.username}, secret, {expiresIn: "1d"})
+        
+        reply.send({
+          id: user.id,
+          email: user.email,
+          username: user.username,
+          roles: user.roles,
+          token
+        }).status(200)
       }
     } catch (error) {
       reply.send({error: error}).status(500)

@@ -19,7 +19,7 @@ interface IRegister{
 
 const FormSchema = yup.object().shape({
   username: yup.string().required('Usuário Obrigatório'),
-  email: yup.string().required('Email Obrigatório'),
+  email: yup.string().email('Digite um email válido exemplo@exemplo.com').required('Email Obrigatório'),
   password: yup.string().required('Senha Obrigatório'),
   role: yup.string().required('Tipo de Usuário Obrigatório'),
 
@@ -39,7 +39,6 @@ export default function Register({ setRegisterIsTrue }: IProps) {
       password: values.password,
       role: values.role,
     }
-    console.log(data)
   }
   return (
     <Flex mb="8" justify="space-between" align="center" direction="column">
