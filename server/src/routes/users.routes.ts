@@ -8,4 +8,5 @@ export async function usersRoutes(app:FastifyInstance) {
   app.post('/users', userController.createUser)
   app.get('/users',  userController.getUsers)
   app.post('/login', userController.loginUser)
+  app.post('/decodetoken', userController.decodeToken)
 }

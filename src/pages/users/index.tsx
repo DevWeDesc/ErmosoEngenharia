@@ -1,11 +1,12 @@
-import { Header } from "@/components/Header";
 import { Paginaton } from "@/components/Pagination";
-import Register from "@/components/Register";
 import { Sidebar } from "@/components/Sidebar";
 import { Flex, SimpleGrid, Box, Table, Thead, Th, Tr, Tbody, Td, Button, Heading, Icon } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { api } from "@/services/api"
 import { RiAddLine, RiPencilLine } from "react-icons/ri";
+import { useRouter } from "next/router";
+import Cookies from "js-cookie";
+import { toast } from "react-toastify";
 
 interface ListUsers {
   id: number;
@@ -16,7 +17,8 @@ interface ListUsers {
 
 export default function Users() {
 
-  const [ registerIsTrue, setRegisterIsTrue ] = useState<boolean>(true)
+  const router = useRouter() 
+
   const [ listUsers, setListUsers ] = useState<ListUsers[]>([])
 
   async function getAllUsers(){
@@ -25,10 +27,6 @@ export default function Users() {
     }).catch((err)=> {
       console.log(err)
     })
-  }
-
-  async function handleVerifyRole(){
-    setRegisterIsTrue(false)
   }
 
   useEffect(() => {
@@ -50,12 +48,10 @@ export default function Users() {
         minHeight="320px"
         m="2"
         >
-    {registerIsTrue ?
-      <>
         <Flex mb="8" justify="space-between" align="center" direction="column">
           <Flex m="2" align="center" w="100%" justify='space-between'>
             <Heading className="text-zinc-300" size="lg" fontWeight="normal">Usúarios</Heading>
-              <Button size="sm" fontSize="sm" onClick={ ()=> handleVerifyRole()} colorScheme="green"
+              <Button size="sm" fontSize="sm" onClick={ ()=> router.push('/register')} colorScheme="green"
               leftIcon={<Icon as={RiAddLine}/>}
               >
                 Criar novo
@@ -86,8 +82,6 @@ export default function Users() {
         </Table>
         </Flex>
         <Paginaton/>
-      </>
-    : <Register setRegisterIsTrue={setRegisterIsTrue} /> }
       </Box>
        
       </SimpleGrid>

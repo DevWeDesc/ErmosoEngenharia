@@ -3,7 +3,7 @@ import { PrismaClient } from "@prisma/client";
 import { z } from "zod";
 import { ValidationContract } from "../validators/validateContract";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken";
+import jwt, { JwtPayload } from "jsonwebtoken";
 import dotenv from "dotenv"
 dotenv.config({
   path: "src/security/.env"
@@ -15,7 +15,7 @@ const UserSchema = z.object({
   email: z.string().email(),
   password: z.string(),
   username: z.string().optional(),
-  roles: z.string()
+  roles: z.string(),
 })
 
 export const userController = {
@@ -90,8 +90,30 @@ export const userController = {
       reply.send({error: error}).status(500)
       console.log(error)
     }
-  }
-
+  },
+  
+  decodeToken: async (request: FastifyRequest, _reply: FastifyReply) => {
+    const { token } = request.body as { token: string };
+    try {
+      const decoded = jwt.verify(token, secret as string) as JwtPayload;
+    
+      if (typeof decoded === 'object' && decoded !== null) {
+        const email = decoded.email;
+        const user = await prisma.user.findUnique({ where: { email }});
+    
+        if (user) {
+          return {
+            username: user.username,
+            email: user.email, 
+            role: user.roles
+          };
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  },
+    
 }
 
      
