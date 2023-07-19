@@ -12,7 +12,7 @@ import { useEffect, useState } from 'react'
 
 export function Header() {
 
-  const [ userInfo, setUserInfo ] = useState({username: '', email: ''})
+  const [ userInfo, setUserInfo ] = useState({ username: '', email: '' })
 
   async function getUserInfos (){
     const token = Cookies.get('token');
@@ -21,7 +21,7 @@ export function Header() {
   } 
   useEffect(()=> {
     getUserInfos()
-  },[])
+  },[userInfo])
   
   const {asPath, pathname} = useRouter()
   if(pathname === "/" || pathname === "/login") {
@@ -29,6 +29,7 @@ export function Header() {
   }
   const{push} = useRouter()  
    const handleLogOut = () => {
+
       push('/')
       toast.warning('Saindo !!',{ theme: 'dark'})
   }

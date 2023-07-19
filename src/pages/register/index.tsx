@@ -28,8 +28,6 @@ const FormSchema = yup.object().shape({
 
 export default function Register() {
 
-  const [isAccess, setIsAccess ] = useState(true);
-
   async function handleVerifyRole(){
     try {
       const token = Cookies.get('token');
@@ -38,7 +36,7 @@ export default function Register() {
       if (response.data.role[0].includes('admin')) {
         router.push('/register');
       } else {
-        setIsAccess(false)
+        router.push('/users')
         toast.error("Você não tem acesso");
       }
     } catch (error) {
@@ -90,97 +88,75 @@ export default function Register() {
     <Flex direction="column" minH="80vh">
     <Flex w="100%" my="6" maxWidth={1480} mx="auto" px="6">
       <SimpleGrid flex='1' gap="4" minChildWidth="320px" alignItems="flex-start" >
-        <Box
-        p="8"
-        textAlign="center"
-        className="bg-slate-900
-        "
-        rounded="8"
-        minHeight="320px"
-        m="2"
-        >
-          <Flex mb="8" justify="space-between" align="center" direction="column">
-      <Flex m="2" align="center" w="100%" justify='space-between'>
-        <Heading className="text-zinc-300" size="lg" fontWeight="normal">Cadastro de Usúarios</Heading>
-        <Button size="sm" fontSize="sm" onClick={ ()=> router.push('/users')} colorScheme="teal"
-        leftIcon={<Icon as={IoReturnDownBack}/>}
-        >
-          Voltar
-        </Button>
-      </Flex>
-      
-      {
-        isAccess ?
-        <FormControl as="form" onSubmit={handleSubmit(handleRegister as  SubmitHandler<FieldValues>)}>
-        
-        <Flex className='mx-32' p="12" gap="12" flexDirection="column">
-          <Input
-            placeholder="Digite o Usuário"
-            label="Usuário"
-            {...register('username')}
-            name="username"
-            id="username"
-            error={errors.username}
-          />
-          <Input
-            placeholder="exemplo@exemplo.com"
-            label="Email"
-            {...register('email')}
-            name="email"
-            id="email"
-            error={errors.email}
-          />
-          <Input
-              placeholder="Digite uma senha"
-              label="Senha"
-              {...register('password')}
-              name="password"
-              id="password"
-              error={errors.password}
-          />
-          <FormLabel 
-            className="text-zinc-300" 
-            htmlFor="propertyType"
-            marginRight={0}
-            >
-              Tipo de usuário{" "}
-            <Select
-              textAlign="center"
-              marginTop={2}
-              height={8}
-              bgColor="gray.700" 
-              className="text-slate-400"
-              {...register('roles')}
-              id="roles"
-            >
-              <option className="!bg-slate-600" value="admin">Administrador</option>
-              <option className="!bg-slate-600" value="user">Usuário</option>
-            </Select>
-          </FormLabel>
-        </Flex>
-        <Flex gap="6" justifyContent="center">
-          <Button
-            type="submit"
-            colorScheme="whatsapp"
+      <Box p="8" textAlign="center" className="bg-slate-900" rounded="8" minHeight="320px" m="2">
+      <Flex mb="8" justify="space-between" align="center" direction="column">
+        <Flex m="2" align="center" w="100%" justify='space-between'>
+          <Heading className="text-zinc-300" size="lg" fontWeight="normal">Cadastro de Usúarios</Heading>
+          <Button size="sm" fontSize="sm" onClick={ ()=> router.push('/users')} colorScheme="teal"
+          leftIcon={<Icon as={IoReturnDownBack}/>}
           >
-            Cadastrar
+            Voltar
           </Button>
         </Flex>
-      </FormControl>
-      :
-      <Flex className="text-zinc-300 text-lg" >
-        VOCE NÃO TEM ACESSO!
+        <FormControl as="form" onSubmit={handleSubmit(handleRegister as  SubmitHandler<FieldValues>)}>
+          <Flex className='mx-32' p="12" gap="12" flexDirection="column">
+            <Input
+              placeholder="Digite o Usuário"
+              label="Usuário"
+              {...register('username')}
+              name="username"
+              id="username"
+              error={errors.username}
+            />
+            <Input
+              placeholder="exemplo@exemplo.com"
+              label="Email"
+              {...register('email')}
+              name="email"
+              id="email"
+              error={errors.email}
+            />
+            <Input
+                placeholder="Digite uma senha"
+                label="Senha"
+                {...register('password')}
+                name="password"
+                id="password"
+                error={errors.password}
+            />
+            <FormLabel 
+              className="text-zinc-300" 
+              htmlFor="propertyType"
+              marginRight={0}
+              >
+                Tipo de usuário{" "}
+              <Select
+                textAlign="center"
+                marginTop={2}
+                height={8}
+                bgColor="gray.700" 
+                className="text-slate-400"
+                {...register('roles')}
+                id="roles"
+              >
+                <option className="!bg-slate-600" value="admin">Administrador</option>
+                <option className="!bg-slate-600" value="user">Usuário</option>
+              </Select>
+            </FormLabel>
+          </Flex>
+          <Flex gap="6" justifyContent="center">
+            <Button
+              type="submit"
+              colorScheme="whatsapp"
+            >
+              Cadastrar
+            </Button>
+          </Flex>
+        </FormControl>
       </Flex>
-      }
-    </Flex>
       </Box>
-       
       </SimpleGrid>
-      
     </Flex>
 </Flex>
-
-
-    
   )
 }
