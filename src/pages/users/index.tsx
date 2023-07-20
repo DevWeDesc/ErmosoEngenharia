@@ -5,8 +5,6 @@ import { useEffect, useState } from "react";
 import { api } from "@/services/api"
 import { RiAddLine, RiPencilLine } from "react-icons/ri";
 import { useRouter } from "next/router";
-import Cookies from "js-cookie";
-import { toast } from "react-toastify";
 
 interface ListUsers {
   id: number;
@@ -18,7 +16,6 @@ interface ListUsers {
 export default function Users() {
 
   const router = useRouter() 
-
   const [ listUsers, setListUsers ] = useState<ListUsers[]>([])
 
   async function getAllUsers(){
@@ -34,60 +31,62 @@ export default function Users() {
   },[])
 
   return (
-
-<Flex direction="column" minH="80vh">
-    <Flex w="100%" my="6" maxWidth={1480} mx="auto" px="6">
-      <Sidebar />
-      <SimpleGrid flex='1' gap="4" minChildWidth="320px" alignItems="flex-start" >
-        <Box
-        p="8"
-        textAlign="center"
-        className="bg-slate-900
-        "
-        rounded="8"
-        minHeight="320px"
-        m="2"
-        >
-        <Flex mb="8" justify="space-between" align="center" direction="column">
-          <Flex m="2" align="center" w="100%" justify='space-between'>
-            <Heading className="text-zinc-300" size="lg" fontWeight="normal">Usúarios</Heading>
-              <Button size="sm" fontSize="sm" onClick={ ()=> router.push('/register')} colorScheme="green"
-              leftIcon={<Icon as={RiAddLine}/>}
-              >
-                Criar novo
-              </Button>
-          </Flex> 
-        <Table colorScheme="whatsapp">
-          <Thead  >
-            <Tr >
-              <Th color="gray.300" >Usuário</Th>
-              <Th color="gray.300" >Email</Th>
-              <Th color="gray.300" >TIPO DE USUÁRIO</Th>
-              <Th color="gray.300" >ATUALIZAR</Th>
-            </Tr>
-          </Thead>
-          <Tbody>
-            {
-              listUsers.map((user)=> (
-              <Tr key={ user.id }>
-                <Td className="text-zinc-300"  >{ user.username }</Td>
-                <Td className="text-zinc-300"  >{ user.email }</Td>
-                <Td className="text-zinc-300"  >{ user.roles.find((role)=> role.includes('admin')) ? 'ADMINITRADOR' : 'USUARIO' }</Td>
-                <Td className="text-zinc-300"  ><Button colorScheme="teal" isDisabled={false}   leftIcon={<Icon as={RiPencilLine} fontSize="16" />}> Editar</Button></Td>
-              </Tr>
-
-              ))
-            }
-          </Tbody>
-        </Table>
+    <Flex direction="column" minH="80vh">
+        <Flex w="100%" my="6" maxWidth={1480} mx="auto" px="6">
+          <Sidebar />
+          <SimpleGrid flex='1' gap="4" minChildWidth="320px" alignItems="flex-start" >
+            <Box
+            p="8"
+            textAlign="center"
+            className="bg-slate-900
+            "
+            rounded="8"
+            minHeight="320px"
+            m="2"
+            >
+            <Flex mb="8" justify="space-between" align="center" direction="column">
+              <Flex m="2" align="center" w="100%" justify='space-between'>
+                <Heading className="text-zinc-300" size="lg" fontWeight="normal">Usúarios</Heading>
+                  <Button size="sm" fontSize="sm" onClick={ ()=> router.push('/create')} colorScheme="green"
+                  leftIcon={<Icon as={RiAddLine}/>}
+                  >
+                    Criar novo
+                  </Button>
+              </Flex> 
+            <Table colorScheme="whatsapp">
+              <Thead  >
+                <Tr >
+                  <Th color="gray.300" >Usuário</Th>
+                  <Th color="gray.300" >Email</Th>
+                  <Th color="gray.300" >TIPO DE USUÁRIO</Th>
+                  <Th color="gray.300" >ATUALIZAR</Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+                {
+                  listUsers.map((user)=> (
+                  <Tr key={ user.id }>
+                    <Td className="text-zinc-300"  >{ user.username }</Td>
+                    <Td className="text-zinc-300"  >{ user.email }</Td>
+                    <Td className="text-zinc-300"  >{ user.roles.find((role)=> role.includes('admin')) ? 'ADMINITRADOR' : 'USUARIO' }</Td>
+                    <Td className="text-zinc-300" >
+                      <Button 
+                        colorScheme="teal"
+                        onClick={ ()=> router.push(`/users/${user.id}`)} 
+                        leftIcon={  
+                          <Icon as={RiPencilLine} fontSize="16"/>
+                        }> Editar</Button>
+                    </Td>
+                  </Tr>
+                  ))
+                }
+              </Tbody>
+            </Table>
+            </Flex>
+            <Paginaton/>
+          </Box>
+          </SimpleGrid>
         </Flex>
-        <Paginaton/>
-      </Box>
-       
-      </SimpleGrid>
-      
     </Flex>
-</Flex>
-  
-  )
+ )
 }

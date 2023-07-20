@@ -21,9 +21,11 @@ export function Header() {
   } 
   useEffect(()=> {
     getUserInfos()
-  },[userInfo])
+  },[])
+
+  useEffect(()=> { },[userInfo])
   
-  const {asPath, pathname} = useRouter()
+  const { asPath, pathname} = useRouter()
   if(pathname === "/" || pathname === "/login") {
     return null;
   }

@@ -119,7 +119,7 @@ async function handleLogin(data: SignInProps) {
 
           <div className="text-zinc-400 flex flex-col items-center m-4 ">
             <p className="underline">Esqueceu sua senha ?</p>
-            <p className="underline">Não tem conta? Cadastre Aqui!</p>
+            <p className="underline" onClick={()=> route.push('/register')} >Não tem conta? Cadastre Aqui!</p>
           </div>
         </form>
       </div>
