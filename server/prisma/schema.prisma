@@ -19,14 +19,22 @@ model User {
 }
 
 model ReportReceived {
-  id             Int     @id @default(autoincrement())
-  customerName   String
-  address        String
-  contactOne     String
-  contactTwo     String
-  registration   String
-  iptu           String
-  leadNumber     String  @unique
-  guaranteeValue String
-  status         String?
+  id               Int                @id @default(autoincrement())
+  customerName     String
+  address          String
+  contactOne       String
+  contactTwo       String
+  registration     String
+  iptu             String
+  leadNumber       String             @unique
+  guaranteeValue   String
+  status           String?
+  reportsDocuments ReportsDocuments[]
+}
+
+model ReportsDocuments {
+  id            Int            @id @default(autoincrement())
+  documentsPath String[]
+  reportId      Int
+  report        ReportReceived @relation(fields: [reportId], references: [id])
 }
