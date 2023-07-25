@@ -1,7 +1,6 @@
 import { useRouter } from 'next/router';
 import { Box, Button, Flex, FormControl, FormLabel, Select, SimpleGrid, Text  } from "@chakra-ui/react";
 import { Input } from "@/components/Input"
-import React, { Dispatch, SetStateAction, useState } from 'react';
 import { AiOutlineCloudUpload } from 'react-icons/ai'
 import * as yup from 'yup'
 import { useForm, SubmitHandler, FieldValues } from "react-hook-form";
@@ -31,16 +30,6 @@ interface FormProps {
 }
 
 const FormSchema = yup.object().shape({
-  address: yup.string().required('Rua / Av Obrigatório'),
-  number: yup.number().required('Número Obrigatório').typeError('Número Obrigatório'),
-  complement: yup.string().required('Complemento Obrigatório'),
-  floor: yup.string().required('Andar Obrigatório'),
-  neighborhood: yup.string().required('Bairro Obrigatório'),
-  city: yup.string().required('Cidade Obrigatória'),
-  state: yup.string().required('Estado Obrigatório'),
-  cep: yup.string().required('CEP Obrigatório'),
-  propertyType: yup.string().required('Tipo de Propriedade Obrigatória'),
-  condominium: yup.string(),
   apparentAge: yup.string().required('Idade Aparente Obrigatória'),
   standard: yup.string().required('Padrão Obrigatório'),
   conservationState: yup.string().required('Estado de Conservação Obrigatório'),
@@ -57,24 +46,12 @@ export default function Forms() {
   const router = useRouter();
   const { leadNumber } = router.query;
 
-  const [ condIsTrue, setCondIsTrue ] = useState<boolean>(true)
-
   const { register, handleSubmit, formState: {errors},} = useForm({
     resolver: yupResolver(FormSchema)
   })
 
   const  handleForm: SubmitHandler<FormProps> = async (values) => {
     const data = {
-      address: values.adress,
-      number: values.number,
-      complement: values.complement,
-      floor: values.floor, 
-      neighborhood: values.neighborhood,
-      city:  values.city,
-      state:  values.state,
-      cep:  values.cep,
-      propertyType:  values.propertyType,
-      condominium:  values.condominium,
       apparentAge:  values.apparentAge,
       standard:  values.standard,
       conservationState:  values.conservationState,
@@ -88,126 +65,18 @@ export default function Forms() {
     console.log(data)
   }
 
-  const mostrarCampo = (value: string)=> {
-    if(value !== 'casa'){
-      setCondIsTrue(false)
-    }else{
-      setCondIsTrue(true)
-    }
-  }
-
   return (
-  <Flex w="75%" my="20" maxWidth={1480} mx="auto" px="6">
-    <SimpleGrid flex='1' gap="4" minChildWidth="320px" alignItems="flex-start" >
+  <Flex w="75%" my="20" maxWidth={1480} minHeight="62vh" mx="auto" px="6">
+    <SimpleGrid flex='1' gap="4" alignItems="flex-start" >
       <Box
         p="6"
         textAlign="center"
         className="bg-slate-900 text-xs"
         rounded="8"
-        minHeight="320px"
         m="2"
       >
       <Text mb="4" fontWeight="bold" className="text-zinc-300">LAUDO {leadNumber}</Text>
       <FormControl as="form" onSubmit={handleSubmit(handleForm as  SubmitHandler<FieldValues>)}>
-        <Flex gap="4" p="4">
-          <Input
-              placeholder="Ex: Avenida Paulista"
-              label="Endereço"
-              {...register('address')}
-              name="address"
-              id="address"
-              error={errors.address}
-          />
-          <Input
-            placeholder="0001"
-            label="Número"
-            {...register('number')}
-            name="number"
-            id="number"
-            error={errors.number}
-          />
-        </Flex>
-        <Flex gap="4" p="4">     
-          <Input
-            placeholder="Bloco 00 A"
-            label="Complemento"
-            {...register('complement')}
-            name="complement"
-            id="complement"
-            error={errors.complement}
-          />
-          <Input
-            placeholder="Andar"
-            label="Andar"
-            {...register('floor')}
-            name="floor"
-            id="floor"
-            error={errors.floor}
-          />   
-        </Flex>
-        <Flex gap="4" p="4">
-          <Input
-            placeholder="Centro"
-            label="Bairro"
-            {...register('neighborhood')}
-            name="neighborhood"
-            id="neighborhood"
-            error={errors.neighborhood}
-          />
-          <Input
-            placeholder="São Paulo"
-            label="Cidade"
-            {...register('city')}
-            name="city"
-            id="city"
-            error={errors.city}
-          />
-          <Input
-            placeholder="São Paulo"
-            label="Estado"
-            {...register('state')}
-            name="state"
-            id="state"
-            error={errors.state}
-          />
-        </Flex>
-        <Flex gap="4" p="4">
-          <Input
-            placeholder="00000-000"
-            label="CEP"
-            {...register('cep')}
-            name="cep"
-            id="cep"
-            error={errors.cep}
-          />
-          <Flex flexDirection="column" flex="1" >
-            <FormLabel className="text-zinc-300" htmlFor="propertyType">
-              Selecione uma opção{" "}
-            </FormLabel>
-            <Select
-              minWidth={320}
-              height={8} 
-              bgColor="gray.700" 
-              className="text-slate-400"
-              name="propertyType"
-              id="propertyType"
-              onChange={ (event)=> mostrarCampo(event.target.value)}
-            >
-              <option className="!bg-slate-600" value="casa">casa</option>
-              <option className="!bg-slate-600" value="apto cobertura">apto cobertura</option>
-              <option className="!bg-slate-600" value="cobertura">apto duplex</option>
-            </Select>
-          </Flex>
-          <Input
-            placeholder="Paulista Garden"
-            label="Condominío"
-            {...register('condominium')}
-            name="condominium"
-            id="condominium"
-            isDisabled={ condIsTrue }
-            error={errors.condominium}
-          />
-        </Flex>
         <Flex gap="4" p="4">
           <Input
             placeholder="14 anos"

@@ -6,6 +6,7 @@ import { Flex, SimpleGrid, Box, Text,  Table, Thead, Th, Tr, Tbody, Td, Button, 
 import dynamic from "next/dynamic";
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router'
+import { HiOutlineDocumentDownload } from 'react-icons/hi'
 
 interface ReportsProps {
     id: string | number; 
@@ -78,8 +79,8 @@ export default function Reports() {
                   <Flex>{report.contactOne}</Flex>
                   <Flex>{report.contactTwo}</Flex>
                 </Td>
-                <Td className="text-zinc-300">{report.registration}</Td>
-                <Td className="text-zinc-300">{report.iptu}</Td>
+                <Td className="text-zinc-300"><Button colorScheme="green"><HiOutlineDocumentDownload className="text-lg"/></Button></Td>
+                <Td className="text-zinc-300"><Button colorScheme="green"><HiOutlineDocumentDownload className="text-lg"/></Button></Td>
                 <Td className="text-zinc-300">{report.leadNumber}</Td>
                 <Td className="text-zinc-300">{report.guaranteeValue}</Td>
                 <Td className="text-zinc-300">{report.status === "open" ? <Status color="yellow">ABERTO</Status> : <Status color="red">FECHADO</Status>}</Td>
