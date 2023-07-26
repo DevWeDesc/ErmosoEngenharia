@@ -35,9 +35,7 @@ async function handleLogin(data: SignInProps) {
   
   try {
     await api.post("/login", data).then((res) => {
-    console.log(data, 'dto')
    if(res.status === 200) {
-    console.log(res, 'result')
     Cookies.set("token", res.data.token, {expires: 1})
     toast.success("Realizando login")
     route.push("/home")
@@ -121,7 +119,7 @@ async function handleLogin(data: SignInProps) {
 
           <div className="text-zinc-400 flex flex-col items-center m-4 ">
             <p className="underline">Esqueceu sua senha ?</p>
-            <p className="underline">Não tem conta? Cadastre Aqui!</p>
+            <p className="underline" onClick={()=> route.push('/register')} >Não tem conta? Cadastre Aqui!</p>
           </div>
         </form>
       </div>
