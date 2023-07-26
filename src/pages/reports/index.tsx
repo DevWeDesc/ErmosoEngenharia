@@ -2,8 +2,9 @@
 import { Paginaton } from "@/components/Pagination";
 import { Sidebar } from "@/components/Sidebar";
 import { api } from "@/services/api";
-import { Flex, SimpleGrid, Box, Text,  Table, Thead, Th, Tr, Tbody, Td, Button, Input } from "@chakra-ui/react";
+import { Flex, SimpleGrid, Box, Text,  Table, Thead, Th, Tr, Tbody, Td, Button, Input, Select } from "@chakra-ui/react";
 import dynamic from "next/dynamic";
+import { report } from "process";
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router'
 import { HiOutlineDocumentDownload } from 'react-icons/hi'
@@ -11,7 +12,7 @@ import { HiOutlineDocumentDownload } from 'react-icons/hi'
 interface ReportsProps {
     id: string | number; 
 	customerName: string;
-		   address: string;
+		   adress: string;
 		contactOne: string;
 		contactTwo: string;
 	registration: string;
@@ -19,6 +20,7 @@ interface ReportsProps {
 		leadNumber: string;
 guaranteeValue: string;
 	      status: string;
+     documents: []
 }
 const Status = dynamic(() => import("./styles").then((mod) => mod.Status), {
   ssr: false,
@@ -41,6 +43,8 @@ export default function Reports() {
     GetOpenReports()
   },[])
 
+  
+
   return (
 <Flex direction="column" minH="80vh">
     <Flex w="100%" my="6" maxWidth={1480} mx="auto" px="6">
@@ -61,8 +65,7 @@ export default function Reports() {
               <Th color="gray.300" >NOME DO CLIENTE</Th>
               <Th color="gray.300" >ENDEREÇO</Th>
               <Th color="gray.300" >CONTATOS</Th>
-              <Th color="gray.300" >MATRICULA</Th>
-              <Th color="gray.300" >IPTU</Th>
+              <Th color="gray.300" >DOCUMENTOS</Th>
               <Th color="gray.300" >LEAD</Th>
               <Th color="gray.300" >VALOR DA GARANTIA</Th>
               <Th color="gray.300" >STATUS</Th>
@@ -74,11 +77,13 @@ export default function Reports() {
               reports.map((report) => (
                 <Tr key={report.id}>
                 <Td className="text-zinc-300">{report.customerName}</Td>
-                <Td className="text-zinc-300">{report.address}</Td>
+                <Td className="text-zinc-300">{report.adress}</Td>
                 <Td className="text-zinc-300 !p-2">
                   <Flex>{report.contactOne}</Flex>
                   <Flex>{report.contactTwo}</Flex>
                 </Td>
+             
+
                 <Td className="text-zinc-300"><Button colorScheme="green"><HiOutlineDocumentDownload className="text-lg"/></Button></Td>
                 <Td className="text-zinc-300"><Button colorScheme="green"><HiOutlineDocumentDownload className="text-lg"/></Button></Td>
                 <Td className="text-zinc-300">{report.leadNumber}</Td>
