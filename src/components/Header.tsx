@@ -5,15 +5,33 @@ import Image from 'next/image'
 import { RiNotificationLine, RiUserAddLine } from 'react-icons/ri'
 import { useRouter } from 'next/router'
 import { toast } from 'react-toastify'
+import Cookies from 'js-cookie'
+import { api } from '@/services/api'
+import { useEffect, useState } from 'react'
+
 
 export function Header() {
+
+  const [ userInfo, setUserInfo ] = useState({ username: '', email: '' })
+
+  async function getUserInfos (){
+    const token = Cookies.get('token');
+      const { data: { email, username }} = await api.post("/decodetoken", { token });
+      setUserInfo( { email, username })
+  } 
+  useEffect(()=> {
+    getUserInfos()
+  },[])
+
+  useEffect(()=> { },[userInfo])
   
-  const {asPath, pathname} = useRouter()
+  const { asPath, pathname} = useRouter()
   if(pathname === "/" || pathname === "/login") {
     return null;
   }
   const{push} = useRouter()  
    const handleLogOut = () => {
+
       push('/')
       toast.warning('Saindo !!',{ theme: 'dark'})
   }
@@ -48,11 +66,11 @@ export function Header() {
         justify="space-between"
       >
         <Flex m="2" p="2" direction="column">
-          <Text fontSize="sm" className="text-zinc-200">
-          Dilan
+          <Text fontSize="sm" className="text-zinc-200 capitalize">
+          { userInfo.username }
           </Text>
           <Text fontSize="sm" className="text-zinc-200">
-            dilan@dilan.com.br
+            { userInfo.email }
           </Text>
         </Flex>
 

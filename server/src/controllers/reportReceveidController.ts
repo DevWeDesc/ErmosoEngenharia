@@ -7,6 +7,7 @@ import { reportServices } from "../services/reportService";
 const prisma = new PrismaClient();
 
 
+
 export const reportReceveid = {
   createNewReport: async (request: FastifyRequest, reply: FastifyReply ) => {
     try {
@@ -39,6 +40,7 @@ export const reportReceveid = {
 
   getReceveidsReports: async (request: FastifyRequest, reply: FastifyReply) => {
     try {
+      
         const reports = await prisma.reportReceived.findMany({
           where: {status: {contains: "open"}},include: {reportsDocuments: {select: {documentsPath: true}}}
         })
@@ -91,6 +93,6 @@ export const reportReceveid = {
       reply.send({message: error}).status(404)
     }
   },
-  
+
 
 };

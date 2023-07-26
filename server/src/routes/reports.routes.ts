@@ -10,4 +10,5 @@ export async function reportRoutes(app:FastifyInstance) {
     app.post("/ermosoreports", {preHandler: ExternalAuth} ,reportReceveid.createNewReport)
     app.post("/ermosopdfs/:leadNumber", reportReceveid.createPdfFiles)
     app.get("/reports", reportReceveid.getReceveidsReports)
+    app.get("/closereports", reportReceveid.getReceidsReportsClose)
 }

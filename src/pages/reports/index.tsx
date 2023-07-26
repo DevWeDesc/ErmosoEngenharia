@@ -1,5 +1,4 @@
 'use client'
-import Forms from "@/components/Forms";
 import { Paginaton } from "@/components/Pagination";
 import { Sidebar } from "@/components/Sidebar";
 import { api } from "@/services/api";
@@ -7,9 +6,8 @@ import { Flex, SimpleGrid, Box, Text,  Table, Thead, Th, Tr, Tbody, Td, Button, 
 import dynamic from "next/dynamic";
 import { report } from "process";
 import { useState, useEffect } from 'react';
-
-
-
+import { useRouter } from 'next/router'
+import { HiOutlineDocumentDownload } from 'react-icons/hi'
 
 interface ReportsProps {
     id: string | number; 
@@ -28,20 +26,22 @@ const Status = dynamic(() => import("./styles").then((mod) => mod.Status), {
   ssr: false,
 });
 export default function Reports() {
-  const [ formIsTrue, setFormIsTrue ] = useState<boolean>(true)
+  
+  const router = useRouter()
+
   const [reports, setReports] = useState<ReportsProps[]>([])
 
-    async function GetOpenReports() {
-      await api.get("/reports").then((res) => {
-        setReports(res.data)
-      }).catch((err) => {
-        console.log(err)
-      })
-    }
+  async function GetOpenReports() {
+    await api.get("/reports").then((res) => {
+      setReports(res.data)
+    }).catch((err) => {
+      console.log(err)
+    })
+  }
 
-    useEffect(() => {
-      GetOpenReports()
-    },[])
+  useEffect(() => {
+    GetOpenReports()
+  },[])
 
   
 
@@ -58,10 +58,6 @@ export default function Reports() {
         minHeight="320px"
         m="2"
         >
-        {
-        formIsTrue ?
-        <>
-        
         <Text mb="4" fontWeight="bold" className="text-zinc-300">LAUDOS ABERTOS</Text>
         <Table colorScheme="whatsapp">
           <Thead  >
@@ -74,8 +70,6 @@ export default function Reports() {
               <Th color="gray.300" >VALOR DA GARANTIA</Th>
               <Th color="gray.300" >STATUS</Th>
               <Th color="gray.300" >FORMULÁRIO</Th>
-
-              
             </Tr>
           </Thead>
           <Tbody>
@@ -88,18 +82,14 @@ export default function Reports() {
                   <Flex>{report.contactOne}</Flex>
                   <Flex>{report.contactTwo}</Flex>
                 </Td>
-                <Td className="text-zinc-300"><Select placeholder="SELECIONE">
+             
 
-                  {
-                    report.documents.map((index) => (
-                      <option value="">NOME + {index[0]}</option>
-                    ))
-                  }
-                  </Select></Td>
+                <Td className="text-zinc-300"><Button colorScheme="green"><HiOutlineDocumentDownload className="text-lg"/></Button></Td>
+                <Td className="text-zinc-300"><Button colorScheme="green"><HiOutlineDocumentDownload className="text-lg"/></Button></Td>
                 <Td className="text-zinc-300">{report.leadNumber}</Td>
                 <Td className="text-zinc-300">{report.guaranteeValue}</Td>
                 <Td className="text-zinc-300">{report.status === "open" ? <Status color="yellow">ABERTO</Status> : <Status color="red">FECHADO</Status>}</Td>
-                <Td className="text-zinc-300"><Button  onClick={()=> setFormIsTrue(false)} colorScheme="teal" isDisabled={false} >PREENCHER</Button></Td>
+                <Td className="text-zinc-300"><Button  onClick={()=> router.push(`/reports/${report.leadNumber}`)} colorScheme="teal" isDisabled={false} >PREENCHER</Button></Td>
               </Tr>
               )) 
             }
@@ -107,13 +97,8 @@ export default function Reports() {
           </Tbody>
         </Table>
         <Paginaton />
-        </>
-        :
-        <>
-          <Text mb="4" fontWeight="bold" className="text-zinc-300">FORMULÁRIO</Text>
-          <Forms setFormIsTrue={ setFormIsTrue } />
-        </>
-      }
+        
+        
         </Box>
       </SimpleGrid>
     </Flex>
