@@ -5,7 +5,6 @@ import multipart from '@fastify/multipart'
 import path from "path";
 import fs from 'fs'
 
-
 export async function reportRoutes(app:FastifyInstance) {
 
     app.register(multipart, {
@@ -19,7 +18,6 @@ export async function reportRoutes(app:FastifyInstance) {
     app.get("/dowload/:fileId", async (request: FastifyRequest<{Params:{ fileId: string}}>, reply: FastifyReply) => {
         const {fileId} = request.params 
         const filePath = path.join(__dirname, '..', '..', 'pdfs', `${fileId}.pdf`)
-        const newPdf = path.join(__dirname, '..', '..', 'pdfs')
         try {
      
             // Verificar se o arquivo PDF existe
