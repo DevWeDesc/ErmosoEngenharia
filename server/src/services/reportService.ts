@@ -4,6 +4,7 @@ import path from "path";
 import fastify from "fastify";
 import util from 'util';
 import { pipeline } from 'stream';
+import { randomUUID } from 'crypto';
 const pump = util.promisify(pipeline)
 
 const fast = fastify()
@@ -11,7 +12,9 @@ const fast = fastify()
 fast.register(multipart)
 
 export const reportServices = {
-  streamPdfs: async (pdfsFile: any, id?: string) => {
+  streamPdfs: async (pdfsFile: any) => {
+
+    const id = randomUUID()
     const filePath = path.join(__dirname, '..', '..','pdfs')
 
     try {
@@ -20,13 +23,12 @@ export const reportServices = {
     let pdfpath = []
     for await (const part of pdfFile) {
 
-         // upload and save the file
-          await pump(part.file, fs.createWriteStream(`${filePath}/${id}${part.filename}`))
-              pdfpath.push(`${filePath}/${id}${part.filename}`)
+          await pump(part.file, fs.createWriteStream(`${filePath}/${id}.pdf`))
+              pdfpath.push(`${filePath}/${id}`)
             
        }
 
-       return pdfpath
+       return id
 
     } catch (error) {
       console.log(error)

@@ -3,10 +3,12 @@ import Forms from "@/components/Forms";
 import { Paginaton } from "@/components/Pagination";
 import { Sidebar } from "@/components/Sidebar";
 import { api } from "@/services/api";
-import { Flex, SimpleGrid, Box, Text,  Table, Thead, Th, Tr, Tbody, Td, Button, Input, Select } from "@chakra-ui/react";
+import { Flex, SimpleGrid, Box, Text,  Table, Thead, Th, Tr, Tbody, Td, Button, Input, Select, Menu, MenuButton, MenuList, MenuItem } from "@chakra-ui/react";
 import dynamic from "next/dynamic";
 import { report } from "process";
 import { useState, useEffect } from 'react';
+import { IoChevronDownCircleOutline } from "react-icons/io5";
+import { toast } from "react-toastify";
 
 
 
@@ -22,7 +24,7 @@ interface ReportsProps {
 		leadNumber: string;
 guaranteeValue: string;
 	      status: string;
-     documents: []
+     document: []
 }
 const Status = dynamic(() => import("./styles").then((mod) => mod.Status), {
   ssr: false,
@@ -43,7 +45,7 @@ export default function Reports() {
       GetOpenReports()
     },[])
 
-  
+
 
   return (
 <Flex direction="column" minH="80vh">
@@ -88,14 +90,27 @@ export default function Reports() {
                   <Flex>{report.contactOne}</Flex>
                   <Flex>{report.contactTwo}</Flex>
                 </Td>
-                <Td className="text-zinc-300"><Select placeholder="SELECIONE">
+                <Td className="text-zinc-300">
+                <Menu>
+                    <MenuButton colorScheme="whatsapp" as={Button} rightIcon={<IoChevronDownCircleOutline />}>
+                      Documentos
+                    </MenuButton>
+                    <MenuList bgColor="black" fontWeight="bold" overflowY="auto" w="100%" display="flex" flexDirection="column" textAlign="center">
+                    {
+                      report.document?.map((value, index) => (
+                       
+                      <MenuItem textAlign="center" bgColor="transparent" as="a" download fontWeight="bold" fontSize="2xl" href={`http://localhost:3333/dowload/${value}`} >Documento: {index}</MenuItem>
+                      ))
+                    }
+                    </MenuList>
+                  </Menu>
+           
+          
+               
 
-                  {
-                    report.documents.map((index) => (
-                      <option value="">NOME + {index[0]}</option>
-                    ))
-                  }
-                  </Select></Td>
+           
+                
+                </Td>
                 <Td className="text-zinc-300">{report.leadNumber}</Td>
                 <Td className="text-zinc-300">{report.guaranteeValue}</Td>
                 <Td className="text-zinc-300">{report.status === "open" ? <Status color="yellow">ABERTO</Status> : <Status color="red">FECHADO</Status>}</Td>

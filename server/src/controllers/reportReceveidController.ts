@@ -1,5 +1,6 @@
 import { FastifyRequest, FastifyReply, FastifyInstance} from "fastify";
 import { PrismaClient } from "@prisma/client";
+import path from "path";
 import fs from 'fs'
 import { ValidationContract } from "../validators/validateContract";
 import { randomUUID } from "crypto";
@@ -56,7 +57,7 @@ export const reportReceveid = {
 		      leadNumber: report.leadNumber,
 		      guaranteeValue: report.guaranteeValue,
 		      status: report.status,
-          document: report.reportsDocuments?.map((doc) => doc.documentsPath[0])
+          document: report.reportsDocuments?.flatMap((doc) => doc.documentsPath)
         }
         return fullData
        }) 
@@ -73,7 +74,7 @@ export const reportReceveid = {
         //@ts-ignore
         const pdfFiles = request.files()
         //@ts-ignore
-       const pdfPaths = await reportServices.streamPdfs(pdfFiles, leadNumber)
+       const pdfPaths = await reportServices.streamPdfs(pdfFiles)
         
         if(!pdfPaths) {
           return
@@ -92,5 +93,7 @@ export const reportReceveid = {
     }
   },
   
+
+
 
 };
