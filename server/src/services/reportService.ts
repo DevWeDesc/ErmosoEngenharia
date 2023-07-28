@@ -3,7 +3,7 @@ import fs from 'fs';
 import path from "path";
 import fastify from "fastify";
 import util from 'util';
-import { pipeline } from 'stream';
+import { Stream, pipeline } from 'stream';
 const pump = util.promisify(pipeline)
 
 const fast = fastify()
@@ -21,7 +21,7 @@ export const reportServices = {
     for await (const part of pdfFile) {
 
          // upload and save the file
-          await pump(part.file, fs.createWriteStream(`${filePath}/${id}${part.filename}`))
+        await pump(part.file, fs.createWriteStream(`${filePath}/${id}${part.filename}`))
               pdfpath.push(`${filePath}/${id}${part.filename}`)
             
        }

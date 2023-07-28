@@ -58,7 +58,7 @@ export const reportReceveid = {
 		      leadNumber: report.leadNumber,
 		      guaranteeValue: report.guaranteeValue,
 		      status: report.status,
-          document: report.reportsDocuments?.map((doc) => doc.documentsPath[0])
+          document: report.reportsDocuments?.map((doc) => doc.documentsPath)
         }
         return fullData
        }) 
@@ -82,7 +82,7 @@ export const reportReceveid = {
         } else {
           await prisma.reportsDocuments.create({
             data: {report: {connect: {leadNumber: leadNumber}}, documentsPath: pdfPaths}
-           })
+          })
 
         
            reply.send({pdfPaths})
