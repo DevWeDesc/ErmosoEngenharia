@@ -1,18 +1,33 @@
 import { FastifyRequest, FastifyReply, FastifyInstance} from "fastify";
 import { PrismaClient } from "@prisma/client";
+import path from "path";
 import fs from 'fs'
 import { ValidationContract } from "../validators/validateContract";
 import { randomUUID } from "crypto";
 import { reportServices } from "../services/reportService";
 const prisma = new PrismaClient();
 
+interface RequestBodyProps {
+  customerName: string;
+  adress: string;
+  district: string;
+  cep: string;
+  neighbour: string;
+  state: string;
+  contactOne: string;
+  contactTwo: string;
+  guaranteeValue: string;
+  iptu: string;
+  leadNumber: string;
+  registration: string
+}
 
 
 export const reportReceveid = {
-  createNewReport: async (request: FastifyRequest, reply: FastifyReply ) => {
+  createNewReport: async (request: FastifyRequest<{Body: RequestBodyProps}>, reply: FastifyReply ) => {
     try {
     
-      const {address, contactOne, contactTwo,customerName, guaranteeValue, iptu,leadNumber, registration}: any = request.body
+      const {adress, cep, contactOne, contactTwo,customerName,district,guaranteeValue,iptu,leadNumber,neighbour,registration,state}: any = request.body
       const id = randomUUID()
         let contract = new ValidationContract()
         await contract.reportAlreadyExist(leadNumber, "Registro já existente")
@@ -24,7 +39,7 @@ export const reportReceveid = {
 
   
 
-          await prisma.reportReceived.create({data: {customerName, address, contactOne, contactTwo, guaranteeValue, iptu, leadNumber, registration}})
+          await prisma.reportReceived.create({data: {customerName, cep, district, neighbour, state, adress, contactOne, contactTwo, guaranteeValue, iptu, leadNumber, registration}})
 
           reply.send("Laudo criado com sucesso").status(201)
         }
@@ -50,7 +65,7 @@ export const reportReceveid = {
         let fullData = {
           id: report.id,
           customerName: report.customerName,
-          adress:  report.address,
+          adress:  report.adress,
           contactOne: report.contactOne,
 		      contactTwo: report.contactTwo,
 		      registration: report.registration,
@@ -58,7 +73,7 @@ export const reportReceveid = {
 		      leadNumber: report.leadNumber,
 		      guaranteeValue: report.guaranteeValue,
 		      status: report.status,
-          document: report.reportsDocuments?.map((doc) => doc.documentsPath)
+          document: report.reportsDocuments?.flatMap((doc) => doc.documentsPath)
         }
         return fullData
        }) 
@@ -75,7 +90,7 @@ export const reportReceveid = {
         //@ts-ignore
         const pdfFiles = request.files()
         //@ts-ignore
-       const pdfPaths = await reportServices.streamPdfs(pdfFiles, leadNumber)
+       const pdfPaths = await reportServices.streamPdfs(pdfFiles)
         
         if(!pdfPaths) {
           return
@@ -93,6 +108,8 @@ export const reportReceveid = {
       reply.send({message: error}).status(404)
     }
   },
+
+
 
 
 };
