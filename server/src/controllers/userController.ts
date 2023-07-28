@@ -5,6 +5,7 @@ import { ValidationContract } from "../validators/validateContract";
 import bcrypt from "bcrypt";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import dotenv from "dotenv"
+import { emaiLService } from "../services/emailService";
 dotenv.config({
   path: "src/security/.env"
 })
@@ -40,6 +41,8 @@ export const userController = {
     await prisma.user.create({
       data: { email, password: hashedPassword, username, roles}
     })
+
+     await  emaiLService.sendEmail()
     reply.status(201).send("USUÁRIO CRIADO COM SUCESSO")
   },
 

@@ -1,7 +1,5 @@
 import { FastifyRequest, FastifyReply, FastifyInstance} from "fastify";
 import { PrismaClient } from "@prisma/client";
-import path from "path";
-import fs from 'fs'
 import { ValidationContract } from "../validators/validateContract";
 import { randomUUID } from "crypto";
 import { reportServices } from "../services/reportService";
@@ -109,6 +107,17 @@ export const reportReceveid = {
     }
   },
 
+  getClosedReports: async (request: FastifyRequest, reply: FastifyReply) => {
+    try {
+      const reports = await prisma.reportReceived.findMany({
+        where: { status: {contains: "close"} } 
+      });
+      reply.send(reports).status(200);
+    } catch (error) {
+      console.log(error);
+      reply.send({ message: error }).status(404);
+    }
+  }
 
 
 
