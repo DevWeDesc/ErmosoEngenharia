@@ -13,22 +13,18 @@ fast.register(multipart)
 
 export const reportServices = {
   streamPdfs: async (pdfsFile: any) => {
-
-    const id = randomUUID()
     const filePath = path.join(__dirname, '..', '..','pdfs')
-
-    try {
-         
+    try {   
     const pdfFile = pdfsFile
     let pdfpath = []
     for await (const part of pdfFile) {
-
+      let id = randomUUID()
           await pump(part.file, fs.createWriteStream(`${filePath}/${id}.pdf`))
-              pdfpath.push(`${filePath}/${id}`)
+              pdfpath.push(`${id}`)
             
        }
 
-       return id
+       return pdfpath
 
     } catch (error) {
       console.log(error)

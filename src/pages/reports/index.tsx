@@ -2,7 +2,7 @@
 import { Paginaton } from "@/components/Pagination";
 import { Sidebar } from "@/components/Sidebar";
 import { api } from "@/services/api";
-import { Flex, SimpleGrid, Box, Text,  Table, Thead, Th, Tr, Tbody, Td, Button, Input, Select, Menu, MenuButton, MenuList, MenuItem } from "@chakra-ui/react";
+import { Flex, SimpleGrid, Box, Text,  Table, Thead, Th, Tr, Tbody, Td, Button, Input, Select, Menu, MenuButton, MenuList, MenuItem, HStack } from "@chakra-ui/react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { report } from "process";
@@ -32,6 +32,7 @@ export default function Reports() {
   const router = useRouter()
 
   const [reports, setReports] = useState<ReportsProps[]>([])
+  const [reloadData, setReloadData] = useState(false)
 
   async function GetOpenReports() {
     await api.get("/reports").then((res) => {
@@ -46,6 +47,15 @@ export default function Reports() {
   },[])
 
 
+  useEffect(() => {
+    if(reloadData === true) {
+      GetOpenReports()
+      setReloadData(false)
+      toast.success("Atualização concluida!!")
+    }
+   
+  },[reloadData])
+
 
   return (
 <Flex direction="column" minH="80vh">
@@ -55,12 +65,17 @@ export default function Reports() {
         <Box
         p="6"
         textAlign="center"
+      
         className="bg-slate-900 text-xs"
         rounded="8"
         minHeight="320px"
         m="2"
         >
-        <Text mb="4" fontWeight="bold" className="text-zinc-300">LAUDOS ABERTOS</Text>
+
+          <Text mb="4" fontWeight="bold" className="text-zinc-300">LAUDOS ABERTOS</Text> 
+          <Button colorScheme="whatsapp" onClick={() => {setReloadData(true);console.log()}}>Atualizar Laudos</Button>
+
+       
         <Table colorScheme="whatsapp">
           <Thead  >
             <Tr>
