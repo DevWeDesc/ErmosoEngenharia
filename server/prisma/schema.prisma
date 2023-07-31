@@ -18,7 +18,7 @@ model User {
 model ReportReceived {
   id               Int                @id @default(autoincrement())
   customerName     String?
- adress        String
+  address        String
   district      String?
   cep           String?
   neighbour     String?
@@ -31,7 +31,23 @@ model ReportReceived {
   guaranteeValue   String?
   status           String?        @default("open")
   reportsDocuments ReportsDocuments[]
+  completionReport CompletionReport?
+
 }
+
+model CompletionReport {
+  id Int    @id @default(autoincrement())
+  leadNumberId String @unique
+  lead ReportReceived @relation(fields: [leadNumberId], references: [leadNumber])
+  standardApparentAge String
+  padrao String
+  conservationState String
+  usefulArea String
+  homogenizedArea String
+  landArea String
+  parkingSpaces String
+  dateReport String
+ } 
 
 model ReportsDocuments {
   id            Int            @id @default(autoincrement())

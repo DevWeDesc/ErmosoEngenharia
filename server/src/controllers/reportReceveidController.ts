@@ -9,7 +9,7 @@ const prisma = new PrismaClient();
 
 interface RequestBodyProps {
   customerName: string;
-  adress: string;
+  address: string;
   district: string;
   cep: string;
   neighbour: string;
@@ -22,12 +22,22 @@ interface RequestBodyProps {
   registration: string
 }
 
+interface RequestCompletionReport {
+  standardApparentAge: string;
+  padrao: string;
+  conservationState: string;
+  usefulArea: string;
+  homogenizedArea: string;
+  landArea: string;
+  parkingSpaces: string;
+  dateReport: string;
+}
 
 export const reportReceveid = {
   createNewReport: async (request: FastifyRequest<{Body: RequestBodyProps}>, reply: FastifyReply ) => {
     try {
     
-      const {adress, cep, contactOne, contactTwo,customerName,district,guaranteeValue,iptu,leadNumber,neighbour,registration,state}: any = request.body
+      const {address, cep, contactOne, contactTwo,customerName,district,guaranteeValue,iptu,leadNumber,neighbour,registration,state}: any = request.body
       const id = randomUUID()
         let contract = new ValidationContract()
         await contract.reportAlreadyExist(leadNumber, "Registro já existente")
@@ -36,15 +46,9 @@ export const reportReceveid = {
           contract.clearErrors()
           return
         } else {
-
-  
-
-          await prisma.reportReceived.create({data: {customerName, cep, district, neighbour, state, adress, contactOne, contactTwo, guaranteeValue, iptu, leadNumber, registration}})
-
+          await prisma.reportReceived.create({ data: { customerName, cep, district, neighbour, state, address, contactOne, contactTwo, guaranteeValue, iptu, leadNumber, registration }})
           reply.send("Laudo criado com sucesso").status(201)
         }
-
-       
     } catch (error) 
     {
         console.log(error)
@@ -53,19 +57,17 @@ export const reportReceveid = {
   },
 
 
-  getReceveidsReports: async (request: FastifyRequest, reply: FastifyReply) => {
+  getReceveidsReports: async (_request: FastifyRequest, reply: FastifyReply) => {
     try {
-      
         const reports = await prisma.reportReceived.findMany({
           where: {status: {contains: "open"}},include: {reportsDocuments: {select: {documentsPath: true}}}
         })
 
        const data = reports.map((report) => {
-      
         let fullData = {
           id: report.id,
           customerName: report.customerName,
-          adress:  report.adress,
+          address:  report.address,
           contactOne: report.contactOne,
 		      contactTwo: report.contactTwo,
 		      registration: report.registration,
@@ -84,7 +86,7 @@ export const reportReceveid = {
     }
   },
 
-  createPdfFiles: async (request: FastifyRequest<{Params: {leadNumber: string}}>, reply: FastifyReply) => {
+  createPdfFiles: async (request: FastifyRequest<{ Params: { leadNumber: string }}>, reply: FastifyReply) => {
     try {
     const { leadNumber } = request.params
         //@ts-ignore
@@ -106,6 +108,7 @@ export const reportReceveid = {
       reply.send({message: error}).status(404)
     }
   },
+
   getCloseReports: async (_request: FastifyRequest, reply: FastifyReply) => {
     try {
       const reports = await prisma.reportReceived.findMany({
@@ -117,8 +120,46 @@ export const reportReceveid = {
       console.log(error);
       reply.send({ message: error }).status(404);
     }
-  }
+  },
 
+  getReportByLead: async(request: FastifyRequest<{ Params: { leadNumber: string }}>, reply: FastifyReply) => {
+    try {
+      const leadNumber = request.params.leadNumber;
+      const report = await prisma.reportReceived.findUnique({
+        where: { leadNumber },
+        include: {
+          //@ts-ignore
+          completionReport: true,
+        },
+      });
+      reply.send(report).status(200);
+    } catch (error) {
+      reply.send({ message: error }).status(404);
+    }
+  },
+
+  createCompletionReport: async (request: FastifyRequest<{ Params: { leadNumber: string }}>, reply: FastifyReply) => {
+    try {
+      const { leadNumber } = request.params
+      const data = request.body as RequestCompletionReport
+      //@ts-ignore
+      await prisma.completionReport.create({
+        data: {
+          lead: {
+            connect: {
+              leadNumber
+            },
+          },
+          ...data
+        }
+      });
+      
+      reply.status(201);
+    } catch (error) {
+      console.log(error)
+      reply.send({ message: error }).status(404)
+    }
+  },
 
 
 };
