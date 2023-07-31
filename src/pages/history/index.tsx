@@ -14,7 +14,7 @@ const Status = dynamic(() => import("../reports/styles").then((mod) => mod.Statu
 interface ReportsProps {
 id: string | number; 
 customerName: string;
-adress: string;
+address: string;
 contactOne: string;
 contactTwo: string;
 registration: string;
@@ -75,7 +75,7 @@ export default function History() {
               closeReports.map((report)=> (
                 <Tr key={ report.id}>
                   <Td className="text-zinc-300">{report.customerName}</Td>
-                  <Td className="text-zinc-300">{report.adress}</Td>
+                  <Td className="text-zinc-300">{report.address}</Td>
                   <Td className="text-zinc-300">
                 <Menu>
                     <MenuButton colorScheme="whatsapp" as={Button} rightIcon={<IoChevronDownCircleOutline />}>

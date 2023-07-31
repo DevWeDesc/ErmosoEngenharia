@@ -9,7 +9,7 @@ import { color } from 'framer-motion';
 
 
 interface FormProps {
-  adress: string;
+  address: string;
   number: number;
   complement: string;
   floor: string;
