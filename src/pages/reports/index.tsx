@@ -1,15 +1,12 @@
 'use client'
-import { Paginaton } from "@/components/Pagination";
 import { Sidebar } from "@/components/Sidebar";
 import { api } from "@/services/api";
 import { Flex, SimpleGrid, Box, Text,  Table, Thead, Th, Tr, Tbody, Td, Button, Input, Select, Menu, MenuButton, MenuList, MenuItem, HStack } from "@chakra-ui/react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
-import { report } from "process";
 import { useState, useEffect } from 'react';
 import { IoChevronDownCircleOutline } from "react-icons/io5";
 import { toast } from "react-toastify";
-import { HiOutlineDocumentDownload } from 'react-icons/hi'
 
 interface ReportsProps {
     id: string | number; 
@@ -22,7 +19,7 @@ interface ReportsProps {
 		leadNumber: string;
 guaranteeValue: string;
 	      status: string;
-     document: []
+      document: []
 }
 const Status = dynamic(() => import("./styles").then((mod) => mod.Status), {
   ssr: false,
@@ -70,13 +67,11 @@ export default function Reports() {
         minHeight="320px"
         maxHeight="420px"
         overflowY={'auto'}
-        m="2"
-        >
+        m="2" >
 
           <Text mb="4" fontWeight="bold" className="text-zinc-300">LAUDOS ABERTOS</Text> 
           <Button colorScheme="whatsapp" onClick={() => {setReloadData(true);console.log()}}>Atualizar Laudos</Button>
 
-       
         <Table colorScheme="whatsapp">
           <Thead  >
             <Tr>

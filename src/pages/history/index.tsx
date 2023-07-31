@@ -1,9 +1,8 @@
 'use client'
-import { Header } from "@/components/Header";
-import { Paginaton } from "@/components/Pagination";
 import { Sidebar } from "@/components/Sidebar";
 import { api } from "@/services/api";
-import { Flex, SimpleGrid, Box, Text,  Table, Thead, Th, Tr, Tbody, Td, Button } from "@chakra-ui/react";
+import { Flex, SimpleGrid, Box, Text,  Table, Thead, Th, Tr, Tbody, Td, Button, Menu, MenuButton, MenuList, MenuItem } from "@chakra-ui/react";
+import { IoChevronDownCircleOutline } from "react-icons/io5";
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
@@ -15,7 +14,7 @@ const Status = dynamic(() => import("../reports/styles").then((mod) => mod.Statu
 interface ReportsProps {
 id: string | number; 
 customerName: string;
-address: string;
+adress: string;
 contactOne: string;
 contactTwo: string;
 registration: string;
@@ -23,6 +22,7 @@ iptu: string;
 leadNumber: string;
 guaranteeValue: string;
 status: string;
+document: [];
 }
 
 export default function History() {
@@ -63,10 +63,11 @@ export default function History() {
           <Thead  >
             <Tr >
               <Th color="gray.300" >NOME DO CLIENTE</Th>
-              <Th color="gray.300" >MATRICULA</Th>
+              <Th color="gray.300" >ENDEREÇOS</Th>
+              <Th color="gray.300" >DOCUMENTOS</Th>
               <Th color="gray.300" >LEAD</Th>
               <Th color="gray.300" >STATUS</Th>
-              <Th color="gray.300" >Concluir</Th>
+              <Th color="gray.300" >DETALHES</Th>
             </Tr>
           </Thead>
           <Tbody>
@@ -74,10 +75,25 @@ export default function History() {
               closeReports.map((report)=> (
                 <Tr key={ report.id}>
                   <Td className="text-zinc-300">{report.customerName}</Td>
-                  <Td className="text-zinc-300">{report.registration}</Td>
+                  <Td className="text-zinc-300">{report.adress}</Td>
+                  <Td className="text-zinc-300">
+                <Menu>
+                    <MenuButton colorScheme="whatsapp" as={Button} rightIcon={<IoChevronDownCircleOutline />}>
+                      Documentos
+                    </MenuButton>
+                    <MenuList bgColor="black" fontWeight="bold" overflowY="auto" w="100%" display="flex" flexDirection="column" textAlign="center">
+                    {
+                      report.document?.map((value, index) => (
+                       
+                      <MenuItem textAlign="center" bgColor="transparent" as="a" download fontWeight="bold" fontSize="2xl" href={`http://localhost:3333/dowload/${value}`} >Documento: {index}</MenuItem>
+                      ))
+                    }
+                    </MenuList>
+                  </Menu>
+                </Td>
                   <Td className="text-zinc-300">{report.leadNumber}</Td>
                   <Td className="text-zinc-300"><Status color="green">FECHADO</Status></Td>
-                  <Td className="text-zinc-300"><Button colorScheme="yellow" onClick={ ()=> router.push(`/history/${report.leadNumber}`)} >DETALHES</Button></Td>
+                  <Td className="text-zinc-300"><Button colorScheme="yellow" onClick={ ()=> router.push(`/history/${report.leadNumber}`)} >VER DETALHES</Button></Td>
                 </Tr>
               ))
             }
