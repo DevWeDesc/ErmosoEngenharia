@@ -51,10 +51,11 @@ export default function History() {
         <Box
         p="8"
         textAlign="center"
-        className="bg-slate-900
-        "
+        className="bg-slate-900"
         rounded="8"
         minHeight="320px"
+        maxHeight="420px"
+        overflowY={'auto'}
         m="2"
         >
         <Text mb="4" fontWeight="bold" className="text-zinc-300">LAUDOS CONCLUÍDOS</Text>
@@ -82,8 +83,6 @@ export default function History() {
             }
           </Tbody>
         </Table>
-
-        <Paginaton />
         </Box>
       </SimpleGrid>
     </Flex>

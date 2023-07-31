@@ -5,6 +5,7 @@ import { AiOutlineCloudUpload } from 'react-icons/ai'
 import * as yup from 'yup'
 import { useForm, SubmitHandler, FieldValues } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { color } from 'framer-motion';
 
 
 interface FormProps {

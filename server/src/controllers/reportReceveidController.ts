@@ -98,8 +98,6 @@ export const reportReceveid = {
           await prisma.reportsDocuments.create({
             data: {report: {connect: {leadNumber: leadNumber}}, documentsPath: pdfPaths}
           })
-
-        
            reply.send({pdfPaths})
            
         }
@@ -108,7 +106,18 @@ export const reportReceveid = {
       reply.send({message: error}).status(404)
     }
   },
-
+  getCloseReports: async (_request: FastifyRequest, reply: FastifyReply) => {
+    try {
+      const reports = await prisma.reportReceived.findMany({
+        // @ts-ignore
+        where: {status: {contains: "close"}} 
+      });
+      reply.send(reports).status(200);
+    } catch (error) {
+      console.log(error);
+      reply.send({ message: error }).status(404);
+    }
+  }
 
 
 

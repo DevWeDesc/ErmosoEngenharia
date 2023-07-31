@@ -65,10 +65,11 @@ export default function Reports() {
         <Box
         p="6"
         textAlign="center"
-      
         className="bg-slate-900 text-xs"
         rounded="8"
         minHeight="320px"
+        maxHeight="420px"
+        overflowY={'auto'}
         m="2"
         >
 
@@ -113,12 +114,6 @@ export default function Reports() {
                     }
                     </MenuList>
                   </Menu>
-           
-          
-               
-
-           
-                
                 </Td>
                 <Td className="text-zinc-300">{report.leadNumber}</Td>
                 <Td className="text-zinc-300">{report.guaranteeValue}</Td>
@@ -130,9 +125,6 @@ export default function Reports() {
    
           </Tbody>
         </Table>
-        <Paginaton />
-        
-        
         </Box>
       </SimpleGrid>
     </Flex>

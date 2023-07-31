@@ -38,10 +38,11 @@ export default function Users() {
             <Box
             p="8"
             textAlign="center"
-            className="bg-slate-900
-            "
+            className="bg-slate-900"
             rounded="8"
             minHeight="320px"
+            maxHeight="420px"
+            overflowY={'auto'}
             m="2"
             >
             <Flex mb="8" justify="space-between" align="center" direction="column">
@@ -54,8 +55,8 @@ export default function Users() {
                   </Button>
               </Flex> 
             <Table colorScheme="whatsapp">
-              <Thead  >
-                <Tr >
+              <Thead>
+                <Tr>
                   <Th color="gray.300" >Usuário</Th>
                   <Th color="gray.300" >Email</Th>
                   <Th color="gray.300" >TIPO DE USUÁRIO</Th>
@@ -83,7 +84,6 @@ export default function Users() {
               </Tbody>
             </Table>
             </Flex>
-            <Paginaton/>
           </Box>
           </SimpleGrid>
         </Flex>

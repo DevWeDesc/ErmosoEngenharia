@@ -15,6 +15,7 @@ export async function reportRoutes(app:FastifyInstance) {
     app.post("/ermosoreports", reportReceveid.createNewReport)
     app.post("/ermosopdfs/:leadNumber", reportReceveid.createPdfFiles)
     app.get("/reports", reportReceveid.getReceveidsReports)
+    app.get("/closereports", reportReceveid.getCloseReports)
     app.get("/dowload/:fileId", async (request: FastifyRequest<{Params:{ fileId: string}}>, reply: FastifyReply) => {
         const {fileId} = request.params 
         const filePath = path.join(__dirname, '..', '..', 'pdfs', `${fileId}.pdf`)
