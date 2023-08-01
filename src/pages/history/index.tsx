@@ -34,6 +34,7 @@ export default function History() {
   async function GetCloseReports() {
     await api.get("/closereports").then((res)=> {
       setCloseReports(res.data)
+      console.log(res.data)
     }).catch((err)=> {
       console.log(err)
     } )
@@ -85,7 +86,7 @@ export default function History() {
                     {
                       report.document?.map((value, index) => (
                        
-                      <MenuItem textAlign="center" bgColor="transparent" as="a" download fontWeight="bold" fontSize="2xl" href={`http://localhost:3333/dowload/${value}`} >Documento: {index}</MenuItem>
+                      <MenuItem textAlign="center" bgColor="transparent" as="a" download fontWeight="bold" fontSize="2xl" href={`http://localhost:3333/dowload/${value}`} >Documento: {index +1}</MenuItem>
                       ))
                     }
                     </MenuList>

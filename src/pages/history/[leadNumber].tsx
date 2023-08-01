@@ -1,20 +1,8 @@
 import { useRouter } from 'next/router';
-import { Box, Button, Flex, Text, SimpleGrid, HStack, TableContainer, Table, Tbody, Tr, Td } from "@chakra-ui/react";
+import { Box, Button, Flex, Text, SimpleGrid, HStack, TableContainer, Table, Tbody, Tr, Td, Menu, MenuButton, MenuList, MenuItem } from "@chakra-ui/react";
 import { api } from "@/services/api";
 import React, { useEffect, useState } from 'react';
-
-interface CompletionReportData {
-  id: number;
-  leadNumberId: string;
-  padrao: string;
-  standardApparentAge: string;
-  conservationState: string;
-  usefulArea: string;
-  homogenizedArea: string;
-  landArea: string;
-  parkingSpaces: string;
-  dateReport: string;
-}
+import { IoChevronDownCircleOutline } from 'react-icons/io5'
 
 
 interface ReportProps {
@@ -32,16 +20,24 @@ interface ReportProps {
   leadNumber: string;
   guaranteeValue: string;
   status: string;
-  completionReport: CompletionReportData
+  leadNumberId: string;
+  padrao: string;
+  standardApparentAge: string;
+  conservationState: string;
+  usefulArea: string;
+  homogenizedArea: string;
+  landArea: string;
+  parkingSpaces: string;
+  dateReport: string;
+  document: [];
 }
 
 export default function Forms() {
   
   const router = useRouter();
   const { leadNumber } = router.query;
-  
-  //@ts-ignore
-  const [report, setReport] = useState<ReportProps>({})
+
+  const [report, setReport] = useState<ReportProps>()
   const [renderReport, setRenderReport] = useState(false)
 
   async function getReport() {
@@ -70,82 +66,92 @@ export default function Forms() {
       >
       <Text mb="4" fontWeight="bold" className="text-base text-zinc-300">DETALHES DO LAUDO {leadNumber}</Text>
       <Text mb="4" mt="12" fontWeight="bold" className="text-zinc-300">DADOS DO CLIENTE</Text>
-
-        {
-          renderReport ?
+      {
+        renderReport ?
           <TableContainer>
-          <Table variant='simple'className='text-white' >
-            <Tbody>
-              <Tr>
-                <Td>NOME DO CLIENTE</Td>
-                <Td>{report.customerName}</Td>
-              </Tr>
-              <Tr>
-                <Td>ENDEREÇO</Td>
-                <Td>{report.address}</Td>
-              </Tr>
-              <Tr>
-                <Td>NOME DO CLIENTE</Td>
-                <Td>{report.district}</Td>
-              </Tr>
-              <Tr>
-                <Td>CONTATO 01</Td>
-                <Td>{report.contactOne}</Td>
-              </Tr>
-              <Tr>
-                <Td>CONTATO 02</Td>
-                <Td>{report.contactTwo}</Td>
-              </Tr>
-              <Tr>
-                <Td>LEAD</Td>
-                <Td>{report.leadNumber}</Td>
-              </Tr>
-              <Tr>
-                <Td>VALOR DA GARANTIA</Td>
-                <Td>{report.guaranteeValue}</Td>
-              </Tr>
-              <Tr>
-                <Td>IDADE APARENTE</Td>
-                <Td>{report.completionReport.standardApparentAge}</Td>
-              </Tr>
-              <Tr>
-                <Td>PADRAO</Td>
-                <Td>{report.completionReport.padrao}</Td>
-              </Tr>
-              <Tr>
-                <Td>ESTADO DE CONSERVAÇÃO</Td>
-                <Td>{report.completionReport.conservationState}</Td>
-              </Tr>
-              <Tr>
-                <Td>ÁREA ÚTIL</Td>
-                <Td>{report.completionReport.usefulArea}</Td>
-              </Tr>
-              <Tr>
-                <Td>ÁREA HOMOGENEIZADA</Td>
-                <Td>{report.completionReport.homogenizedArea}</Td>
-              </Tr>
-              <Tr>
-                <Td>ÁREA DE TERRENO</Td>
-                <Td>{report.completionReport.landArea}</Td>
-              </Tr>
-              <Tr>
-                <Td>VAGAS DE GARAGEM</Td>
-                <Td>{report.completionReport.parkingSpaces}</Td>
-              </Tr>
-              <Tr>
-                <Td>DATA DO LAUDO</Td>
-                <Td>{report.completionReport.dateReport}</Td>
-              </Tr>
-            </Tbody>
-          </Table>
-        </TableContainer>
-
-          : <div>Teste</div>
-        }
+            <Table variant='simple'className='text-white' >
+              <Tbody>
+                <Tr>
+                  <Td>NOME DO CLIENTE</Td>
+                  <Td>{report?.customerName}</Td>
+                </Tr>
+                <Tr>
+                  <Td>ENDEREÇO</Td>
+                  <Td>{report?.address}</Td>
+                </Tr>
+                <Tr>
+                  <Td>NOME DO CLIENTE</Td>
+                  <Td>{report?.district}</Td>
+                </Tr>
+                <Tr>
+                  <Td>CONTATO 01</Td>
+                  <Td>{report?.contactOne}</Td>
+                </Tr>
+                <Tr>
+                  <Td>CONTATO 02</Td>
+                  <Td>{report?.contactTwo}</Td>
+                </Tr>
+                <Tr>
+                  <Td>LEAD</Td>
+                  <Td>{report?.leadNumber}</Td>
+                </Tr>
+                <Tr>
+                  <Td>VALOR DA GARANTIA</Td>
+                  <Td>{report?.guaranteeValue}</Td>
+                </Tr>
+                <Tr>
+                  <Td>IDADE APARENTE</Td>
+                  <Td>{report?.standardApparentAge}</Td>
+                </Tr>
+                <Tr>
+                  <Td>PADRAO</Td>
+                  <Td>{report?.padrao}</Td>
+                </Tr>
+                <Tr>
+                  <Td>ESTADO DE CONSERVAÇÃO</Td>
+                  <Td>{report?.conservationState}</Td>
+                </Tr>
+                <Tr>
+                  <Td>ÁREA ÚTIL</Td>
+                  <Td>{report?.usefulArea}</Td>
+                </Tr>
+                <Tr>
+                  <Td>ÁREA HOMOGENEIZADA</Td>
+                  <Td>{report?.homogenizedArea}</Td>
+                </Tr>
+                <Tr>
+                  <Td>ÁREA DE TERRENO</Td>
+                  <Td>{report?.landArea}</Td>
+                </Tr>
+                <Tr>
+                  <Td>VAGAS DE GARAGEM</Td>
+                  <Td>{report?.parkingSpaces}</Td>
+                </Tr>
+                <Tr>
+                  <Td>DATA DO LAUDO</Td>
+                  <Td>{report?.dateReport}</Td>
+                </Tr>
+              </Tbody>
+            </Table>
+          </TableContainer>
+        : <div> <Text>Carregando...</Text> </div>
+      }
    
-
       <HStack justify="center" spacing='25px' py="12">
-        <Button colorScheme="yellow">Download do PDF</Button>
+        <Menu>
+          <MenuButton colorScheme="yellow" as={ Button } rightIcon={ <IoChevronDownCircleOutline /> }>
+            Download do PDF
+          </MenuButton>
+          <MenuList bgColor="black" fontWeight="bold" overflowY="auto" w="100%" display="flex" flexDirection="column" textAlign="center">
+          {
+            report?.document.map((value, index) => (
+              <MenuItem textAlign="center" bgColor="transparent" as="a" download fontWeight="bold" fontSize="2xl" href={`http://localhost:3333/dowload/${value}`}>
+                Documento: {index +1}
+              </MenuItem>
+            ))
+          }
+          </MenuList>
+        </Menu>
         <Button colorScheme="teal" onClick={()=> router.push('/history') }>Voltar</Button>
       </HStack>
 

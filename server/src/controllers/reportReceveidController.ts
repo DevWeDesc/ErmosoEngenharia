@@ -1,7 +1,5 @@
 import { FastifyRequest, FastifyReply, FastifyInstance} from "fastify";
 import { PrismaClient } from "@prisma/client";
-import path from "path";
-import fs from 'fs'
 import { ValidationContract } from "../validators/validateContract";
 import { randomUUID } from "crypto";
 import { reportServices } from "../services/reportService";
@@ -38,7 +36,6 @@ export const reportReceveid = {
     try {
     
       const {address, cep, contactOne, contactTwo,customerName,district,guaranteeValue,iptu,leadNumber,neighbour,registration,state}: any = request.body
-      const id = randomUUID()
         let contract = new ValidationContract()
         await contract.reportAlreadyExist(leadNumber, "Registro já existente")
         if(contract.hadError()){
@@ -56,7 +53,6 @@ export const reportReceveid = {
     }
   },
 
-
   getReceveidsReports: async (_request: FastifyRequest, reply: FastifyReply) => {
     try {
         const reports = await prisma.reportReceived.findMany({
@@ -64,17 +60,20 @@ export const reportReceveid = {
         })
 
        const data = reports.map((report) => {
-        let fullData = {
+        const fullData = {
           id: report.id,
           customerName: report.customerName,
-          address:  report.address,
+          address: report.address,
+          district: report.district,
+          cep: report.cep,
+          neighbour: report.neighbour,
+          state: report.state,
           contactOne: report.contactOne,
-		      contactTwo: report.contactTwo,
-		      registration: report.registration,
-		      iptu: report.iptu,
-		      leadNumber: report.leadNumber,
-		      guaranteeValue: report.guaranteeValue,
-		      status: report.status,
+          contactTwo: report.contactTwo,
+          guaranteeValue: report.guaranteeValue,
+          iptu: report.iptu,
+          leadNumber: report.leadNumber,
+          registration: report.registration,
           document: report.reportsDocuments?.flatMap((doc) => doc.documentsPath)
         }
         return fullData
@@ -89,9 +88,7 @@ export const reportReceveid = {
   createPdfFiles: async (request: FastifyRequest<{ Params: { leadNumber: string }}>, reply: FastifyReply) => {
     try {
     const { leadNumber } = request.params
-        //@ts-ignore
         const pdfFiles = request.files()
-        //@ts-ignore
        const pdfPaths = await reportServices.streamPdfs(pdfFiles)
         
         if(!pdfPaths) {
@@ -108,14 +105,33 @@ export const reportReceveid = {
       reply.send({message: error}).status(404)
     }
   },
-
+  
   getCloseReports: async (_request: FastifyRequest, reply: FastifyReply) => {
     try {
       const reports = await prisma.reportReceived.findMany({
-        // @ts-ignore
-        where: {status: {contains: "close"}} 
-      });
-      reply.send(reports).status(200);
+        where: {status: {contains: "close"}},include: {reportsDocuments: {select: {documentsPath: true}}}
+      })
+
+      const data = reports.map((report) => {
+        const fullData = {
+          id: report.id,
+          customerName: report.customerName,
+          address: report.address,
+          district: report.district,
+          cep: report.cep,
+          neighbour: report.neighbour,
+          state: report.state,
+          contactOne: report.contactOne,
+          contactTwo: report.contactTwo,
+          guaranteeValue: report.guaranteeValue,
+          iptu: report.iptu,
+          leadNumber: report.leadNumber,
+          registration: report.registration,
+          document: report.reportsDocuments?.flatMap((doc) => doc.documentsPath)
+        }
+        return fullData
+       })
+      reply.send(data).status(200)
     } catch (error) {
       console.log(error);
       reply.send({ message: error }).status(404);
@@ -124,17 +140,45 @@ export const reportReceveid = {
 
   getReportByLead: async(request: FastifyRequest<{ Params: { leadNumber: string }}>, reply: FastifyReply) => {
     try {
+      let fullData = {}
       const leadNumber = request.params.leadNumber;
       const report = await prisma.reportReceived.findUnique({
         where: { leadNumber },
         include: {
-          //@ts-ignore
-          completionReport: true,
-          reportsDocuments: true,
-
+          completionReport: {select: {standardApparentAge: true, padrao: true, conservationState: true, usefulArea: true, homogenizedArea: true, landArea: true, parkingSpaces: true, dateReport: true}},
+          reportsDocuments: {select: { documentsPath: true }},
         },
       });
-      reply.send(report).status(200);
+
+      if(report){
+        fullData = {
+          customerName: report.customerName,
+          address: report.address,
+          district: report.district,
+          cep: report.cep,
+          neighbour: report.neighbour,
+          state: report.state,
+          contactOne: report.contactOne,
+          contactTwo: report.contactTwo,
+          guaranteeValue: report.guaranteeValue,
+          iptu: report.iptu,
+          leadNumber: report.leadNumber,
+          registration: report.registration,
+          standardApparentAge: report.completionReport?.conservationState,
+          padrao: report.completionReport?.padrao,
+          conservationState: report.completionReport?.conservationState,
+          usefulArea: report.completionReport?.usefulArea,
+          homogenizedArea: report.completionReport?.homogenizedArea,
+          landArea: report.completionReport?.landArea,
+          parkingSpaces: report.completionReport?.parkingSpaces,
+          dateReport: report.completionReport?.dateReport,
+          document: report.reportsDocuments?.flatMap((doc) => doc.documentsPath),
+
+        }
+        return fullData
+        }
+        
+      reply.send(fullData).status(200);
     } catch (error) {
       reply.send({ message: error }).status(404);
     }
@@ -144,7 +188,6 @@ export const reportReceveid = {
     try {
       const { leadNumber } = request.params
       const data = request.body as RequestCompletionReport
-      //@ts-ignore
       await prisma.completionReport.create({
         data: {
           lead: {

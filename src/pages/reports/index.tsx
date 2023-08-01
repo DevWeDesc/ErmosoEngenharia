@@ -53,7 +53,6 @@ export default function Reports() {
    
   },[reloadData])
 
-
   return (
 <Flex direction="column" minH="80vh">
     <Flex w="100%" my="6" maxWidth={1480} mx="auto" px="6">
@@ -104,7 +103,7 @@ export default function Reports() {
                     {
                       report.document?.map((value, index) => (
                        
-                      <MenuItem textAlign="center" bgColor="transparent" as="a" download fontWeight="bold" fontSize="2xl" href={`http://localhost:3333/dowload/${value}`} >Documento: {index}</MenuItem>
+                      <MenuItem textAlign="center" bgColor="transparent" as="a" download fontWeight="bold" fontSize="2xl" href={`http://localhost:3333/dowload/${value}`} >Documento: {index +1}</MenuItem>
                       ))
                     }
                     </MenuList>
