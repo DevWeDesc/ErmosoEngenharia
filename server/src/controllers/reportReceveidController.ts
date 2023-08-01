@@ -130,6 +130,8 @@ export const reportReceveid = {
         include: {
           //@ts-ignore
           completionReport: true,
+          reportsDocuments: true,
+
         },
       });
       reply.send(report).status(200);
