@@ -5,41 +5,31 @@ import { AiOutlineCloudUpload } from 'react-icons/ai'
 import * as yup from 'yup'
 import { useForm, SubmitHandler, FieldValues } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { color } from 'framer-motion';
+import { toast } from 'react-toastify';
+import { api } from '@/services/api';
 
 
-interface FormProps {
-  address: string;
-  number: number;
-  complement: string;
-  floor: string;
-  neighborhood: string;
-  city: string;
-  state: string;
-  cep: string;
-  propertyType: string;
-  condominium: string;
-  apparentAge: string;
-  standard: string;
+interface RequestCompletionReport {
+  standardApparentAge: string;
+  padrao: string;
   conservationState: string;
   usefulArea: string;
   homogenizedArea: string;
   landArea: string;
-  vacancies: string;
-  value: string;
-  reportDate: string;
+  parkingSpaces: string;
+  dateReport: string;
 }
 
 const FormSchema = yup.object().shape({
-  apparentAge: yup.string().required('Idade Aparente Obrigatória'),
-  standard: yup.string().required('Padrão Obrigatório'),
+  standardApparentAge: yup.string().required('Idade Aparente Obrigatória'),
+  padrao: yup.string().required('Padrão Obrigatório'),
   conservationState: yup.string().required('Estado de Conservação Obrigatório'),
   usefulArea: yup.string().required('Área Útil Obrigatória'),
   homogenizedArea: yup.string().required('Área Homogeneizada Obrigatória'),
   landArea: yup.string().required('Área de Terreno Obrigatório'),
-  vacancies: yup.string().required('Vagas Obrigatória'),
-  value:yup.string().required('Valor Obrigatório'),
-  reportDate: yup.string().required('Data do Laudo Obrigatório'),
+  parkingSpaces: yup.string().required('Vagas Obrigatória'),
+  // value:yup.string().required('Valor Obrigatório'),
+  dateReport: yup.string().required('Data do Laudo Obrigatório'),
 })
 
 export default function Forms() {
@@ -51,19 +41,33 @@ export default function Forms() {
     resolver: yupResolver(FormSchema)
   })
 
-  const  handleForm: SubmitHandler<FormProps> = async (values) => {
+
+  async function handleLogin(data: RequestCompletionReport) {
+    try{
+      await api.post(`/completionreport/${leadNumber}`, data).then((res) => {
+        if(res.status === 201) {
+          toast.success("Formulário enviado com sucesso")
+          router.push("/home")
+        }
+      })          
+    } catch (error){
+      toast.error("Falha ao enviar o formulário")
+    }
+  }
+
+  const  handleForm: SubmitHandler<RequestCompletionReport> = async (values) => {
     const data = {
-      apparentAge:  values.apparentAge,
-      standard:  values.standard,
+      standardApparentAge:  values.standardApparentAge,
+      padrao:  values.padrao,
       conservationState:  values.conservationState,
       usefulArea:  values.usefulArea,
       homogenizedArea:  values.homogenizedArea,
       landArea:  values.landArea,
-      vacancies:  values.vacancies,
-      value:  values.value,
-      reportDate:  values.reportDate
+      parkingSpaces:  values.parkingSpaces,
+      dateReport:  values.dateReport,
+      // value:  values.value,
     }
-    console.log(data)
+    handleLogin(data)
   }
 
   return (
@@ -80,23 +84,23 @@ export default function Forms() {
       <FormControl as="form" onSubmit={handleSubmit(handleForm as  SubmitHandler<FieldValues>)}>
         <Flex gap="4" p="4">
           <Input
-            placeholder="14 anos"
+            placeholder="Qual a idade aparente do imóvel?"
             label="Idade aparente"
-            {...register('apparentAge')}
-            name="apparentAge"
-            id="apparentAge"
-            error={errors.apparentAge}
+            {...register('standardApparentAge')}
+            name="standardApparentAge"
+            id="standardApparentAge"
+            error={errors.standardApparentAge}
           />
           <Input
-            placeholder="Comercial"
+            placeholder="Qual o padrão?"
             label="Padrão"
-            {...register('standard')}
-            name="standard"
-            id="standard"
-            error={errors.standard}
+            {...register('padrao')}
+            name="padrao"
+            id="padrao"
+            error={errors.padrao}
           />
           <Input
-            placeholder="Conservado"
+            placeholder="Qual o estado de conservação?"
             label="Estado de conservação"
             {...register('conservationState')}
             name="conservationState"
@@ -132,32 +136,32 @@ export default function Forms() {
         </Flex>
         <Flex gap="4" p="4">
           <Input
-            label="Vagas"
-            {...register('vacancies')}
+            label="Quantas vagas de garagem?"
+            {...register('parkingSpaces')}
             placeholder="01"
-            name="vacancies"
-            id="vacancies"
-            error={errors.vacancies}
+            name="parkingSpaces"
+            id="parkingSpaces"
+            error={errors.parkingSpaces}
           />
-          <Input
+          {/* <Input
             placeholder="R$ 300.000,00"
             label="Valor"
             {...register('value')}
             name="value"
             id="value"
             error={errors.value}
-          />
+          /> */}
           <Input
             placeholder="Data do laudo"
             label="Data do laudo"
             type="date"
-            {...register('reportDate')}
-            name="reportDate"
-            id="reportDate"
-            error={errors.reportDate}
+            {...register('dateReport')}
+            name="dateReport"
+            id="dateReport"
+            error={errors.dateReport}
           />
         </Flex>
-        <Flex m="6" gap="6" align="center" justify="center">
+        {/* <Flex m="6" gap="6" align="center" justify="center">
           <FormLabel display="flex" htmlFor="file" width="200px">
             <AiOutlineCloudUpload className="w-[100px]" fontSize="80px" color="white" />
             <Input
@@ -170,8 +174,8 @@ export default function Forms() {
             />
             <Text width="400px" display="flex" alignItems="center" className="text-zinc-300">UPLOAD PDF</Text>
           </FormLabel>
-        </Flex>
-        <Flex gap="6" justifyContent="center">
+        </Flex> */}
+        <Flex gap="6" paddingTop={8} justifyContent="center">
           <Button
             type="submit"
             colorScheme="whatsapp"

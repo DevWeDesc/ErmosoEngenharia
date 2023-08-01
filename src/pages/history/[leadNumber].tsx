@@ -144,7 +144,7 @@ export default function Forms() {
           </MenuButton>
           <MenuList bgColor="black" fontWeight="bold" overflowY="auto" w="100%" display="flex" flexDirection="column" textAlign="center">
           {
-            report?.document.map((value, index) => (
+            report?.document?.map((value, index) => (
               <MenuItem textAlign="center" bgColor="transparent" as="a" download fontWeight="bold" fontSize="2xl" href={`http://localhost:3333/dowload/${value}`}>
                 Documento: {index +1}
               </MenuItem>

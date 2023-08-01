@@ -27,7 +27,7 @@ const Status = dynamic(() => import("./styles").then((mod) => mod.Status), {
 export default function Reports() {
   
   const router = useRouter()
-
+  
   const [reports, setReports] = useState<ReportsProps[]>([])
   const [reloadData, setReloadData] = useState(false)
 
