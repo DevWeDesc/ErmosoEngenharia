@@ -29,6 +29,7 @@ interface RequestCompletionReport {
   landArea: string;
   parkingSpaces: string;
   dateReport: string;
+  status: string;
 }
 
 export const reportReceveid = {
@@ -74,6 +75,7 @@ export const reportReceveid = {
           iptu: report.iptu,
           leadNumber: report.leadNumber,
           registration: report.registration,
+          status: report.status,
           document: report.reportsDocuments?.flatMap((doc) => doc.documentsPath)
         }
         return fullData
@@ -145,8 +147,8 @@ export const reportReceveid = {
       const report = await prisma.reportReceived.findUnique({
         where: { leadNumber },
         include: {
-          completionReport: {select: {standardApparentAge: true, padrao: true, conservationState: true, usefulArea: true, homogenizedArea: true, landArea: true, parkingSpaces: true, dateReport: true}},
           reportsDocuments: {select: { documentsPath: true }},
+          completionReport: {select: {standardApparentAge: true, padrao: true, conservationState: true, usefulArea: true, homogenizedArea: true, landArea: true, parkingSpaces: true, dateReport: true}},
         },
       });
 
@@ -164,6 +166,7 @@ export const reportReceveid = {
           iptu: report.iptu,
           leadNumber: report.leadNumber,
           registration: report.registration,
+          document: report.reportsDocuments?.flatMap((doc) => doc.documentsPath),
           standardApparentAge: report.completionReport?.conservationState,
           padrao: report.completionReport?.padrao,
           conservationState: report.completionReport?.conservationState,
@@ -172,7 +175,6 @@ export const reportReceveid = {
           landArea: report.completionReport?.landArea,
           parkingSpaces: report.completionReport?.parkingSpaces,
           dateReport: report.completionReport?.dateReport,
-          document: report.reportsDocuments?.flatMap((doc) => doc.documentsPath),
 
         }
         return fullData
@@ -195,9 +197,10 @@ export const reportReceveid = {
               leadNumber
             },
           },
-          ...data
+          ...data,
         }
       });
+      await prisma.reportReceived.update({ where: { leadNumber }, data: { status: "close" }})
       
       reply.status(201);
     } catch (error) {
