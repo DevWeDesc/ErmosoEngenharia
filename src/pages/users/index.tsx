@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import { api } from "@/services/api"
 import { RiAddLine, RiPencilLine } from "react-icons/ri";
 import { useRouter } from "next/router";
+import Cookies from "js-cookie";
+import { toast } from "react-toastify";
 
 interface ListUsers {
   id: number;
@@ -29,6 +31,22 @@ export default function Users() {
   useEffect(() => {
     getAllUsers()
   },[])
+
+  async function handleVerifyRole(id: number){
+    try {
+      const token = Cookies.get('token');
+      const response = await api.post("/decodetoken", { token });
+  
+      if (response.data.role[0].includes('admin')) {
+        router.push(`users/${id}`);
+      } else {
+        toast.error("Você não tem acesso");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+
+  }
 
   return (
     <Flex direction="column" minH="80vh">
@@ -69,11 +87,11 @@ export default function Users() {
                   <Tr key={ user.id }>
                     <Td className="text-zinc-300"  >{ user.username }</Td>
                     <Td className="text-zinc-300"  >{ user.email }</Td>
-                    <Td className="text-zinc-300"  >{ user.roles.find((role)=> role.includes('admin')) ? 'ADMINITRADOR' : 'USUARIO' }</Td>
+                    <Td className="text-zinc-300"  >{ user.roles.find((role)=> role.includes('admin')) ? 'ADMINISTRADOR' : 'USUARIO' }</Td>
                     <Td className="text-zinc-300" >
                       <Button 
                         colorScheme="teal"
-                        onClick={ ()=> router.push(`/users/${user.id}`)} 
+                        onClick={ ()=> handleVerifyRole(user.id)} 
                         leftIcon={  
                           <Icon as={RiPencilLine} fontSize="16"/>
                         }> Editar</Button>
