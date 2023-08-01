@@ -1,7 +1,7 @@
 'use client'
 import { Sidebar } from "@/components/Sidebar";
 import { api } from "@/services/api";
-import { Flex, SimpleGrid, Box, Text,  Table, Thead, Th, Tr, Tbody, Td, Button, Menu, MenuButton, MenuList, MenuItem } from "@chakra-ui/react";
+import { Flex, SimpleGrid, Box, Text,  Table, Thead, Th, Tr, Tbody, Td, Button, Menu, MenuButton, MenuList, MenuItem, Input } from "@chakra-ui/react";
 import { IoChevronDownCircleOutline } from "react-icons/io5";
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
@@ -29,12 +29,13 @@ export default function History() {
 
   const router = useRouter()
 
-  const [closeReports, setCloseReports ] = useState<ReportsProps[]>([])
+  const [filteredReports, setFilteredReports] = useState<ReportsProps[]>([])
+  const [allReports, setAllReports] = useState<ReportsProps[]>([]);
 
   async function GetCloseReports() {
     await api.get("/closereports").then((res)=> {
-      setCloseReports(res.data)
-      console.log(res.data)
+      setFilteredReports(res.data)
+      setAllReports(res.data);
     }).catch((err)=> {
       console.log(err)
     } )
@@ -44,8 +45,20 @@ export default function History() {
     GetCloseReports()
   },[])
 
+  
+  async function handleFilterReports(event: string) {
+    if (event.length === 0) {
+      setFilteredReports(allReports);
+      return;
+    }
+    setFilteredReports(allReports.filter((report) => 
+      report.leadNumber.includes(event) || report.customerName.toLowerCase().includes(event.toLowerCase()))
+    );
+  }
+
+
   return (
-<Flex direction="column" h="80vh">
+  <Flex direction="column" h="80vh">
     <Flex w="100%" my="6" maxWidth={1480} mx="auto" px="6">
       <Sidebar />
       <SimpleGrid flex='1' gap="4" minChildWidth="320px" alignItems="flex-start" >
@@ -60,6 +73,13 @@ export default function History() {
         m="2"
         >
         <Text mb="4" fontWeight="bold" className="text-zinc-300">LAUDOS CONCLUÍDOS</Text>
+        <Input 
+          color={"white"}
+          placeholder="Digite o código do LEAD ou nome do cliente para pesquisar..."
+          marginBottom={12}
+          onChange={(event)=> handleFilterReports(event.target.value)}
+        />
+
         <Table colorScheme="whatsapp">
           <Thead  >
             <Tr >
@@ -73,7 +93,7 @@ export default function History() {
           </Thead>
           <Tbody>
             {
-              closeReports.map((report)=> (
+              filteredReports.map((report)=> (
                 <Tr key={ report.id}>
                   <Td className="text-zinc-300">{report.customerName}</Td>
                   <Td className="text-zinc-300">{report.address}</Td>
@@ -103,7 +123,6 @@ export default function History() {
         </Box>
       </SimpleGrid>
     </Flex>
-</Flex>
-  
+  </Flex>
   )
 }
