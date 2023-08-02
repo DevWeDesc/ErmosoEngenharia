@@ -3,7 +3,7 @@ import { HStack, Button, Flex, Text, Icon } from '@chakra-ui/react'
 import logo from '../../public/hermosoLogo.png'
 import Image from 'next/image'
 import { RiNotificationLine, RiUserAddLine } from 'react-icons/ri'
-import { useRouter } from 'next/router'
+import router, { useRouter } from 'next/router'
 import { toast } from 'react-toastify'
 import Cookies from 'js-cookie'
 import { api } from '@/services/api'
@@ -11,6 +11,24 @@ import { useEffect, useState } from 'react'
 
 
 export function Header() {
+
+
+  async function handleVerifyRole(){
+    try {
+      const token = Cookies.get('token');
+      const response = await api.post("/decodetoken", { token });
+  
+      if (response.data.role[0].includes('admin')) {
+        router.push('/create');
+      } else {
+        router.push('/users')
+        toast.error("Você não tem acesso");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+
+  }
 
   const [ userInfo, setUserInfo ] = useState({ username: '', email: '' })
 
@@ -77,7 +95,7 @@ export function Header() {
         <Flex m="2" p="2" direction="row" gap="2">
           <HStack spacing="2" gap="2">
             <Icon as={RiNotificationLine} color="whatsapp.200"  fontSize={20} />
-            <Icon as={RiUserAddLine} color="whatsapp.200" 
+            <Icon as={RiUserAddLine} onClick={()=> handleVerifyRole()} color="whatsapp.200" 
             fontSize={20} />
           </HStack>
           <Button 

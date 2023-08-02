@@ -3,6 +3,7 @@ import { Box, Button, Flex, Text, SimpleGrid, HStack, TableContainer, Table, Tbo
 import { api } from "@/services/api";
 import React, { useEffect, useState } from 'react';
 import { IoChevronDownCircleOutline } from 'react-icons/io5'
+import moment from 'moment';
 
 
 interface ReportProps {
@@ -22,7 +23,7 @@ interface ReportProps {
   status: string;
   leadNumberId: string;
   padrao: string;
-  standardApparentAge: string;
+  apparentAge: string;
   conservationState: string;
   usefulArea: string;
   homogenizedArea: string;
@@ -101,7 +102,7 @@ export default function Forms() {
                 </Tr>
                 <Tr>
                   <Td>IDADE APARENTE</Td>
-                  <Td>{report?.standardApparentAge}</Td>
+                  <Td>{report?.apparentAge}</Td>
                 </Tr>
                 <Tr>
                   <Td>PADRAO</Td>
@@ -129,7 +130,7 @@ export default function Forms() {
                 </Tr>
                 <Tr>
                   <Td>DATA DO LAUDO</Td>
-                  <Td>{report?.dateReport}</Td>
+                  <Td>{ moment(report?.dateReport).format('DD/MM/YYYY')}</Td>
                 </Tr>
               </Tbody>
             </Table>

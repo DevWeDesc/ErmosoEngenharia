@@ -13,7 +13,7 @@ ADD COLUMN     "address" TEXT NOT NULL;
 CREATE TABLE "CompletionReport" (
     "id" SERIAL NOT NULL,
     "leadNumberId" TEXT NOT NULL,
-    "standardApparentAge" TEXT NOT NULL,
+    "apparentAge" TEXT NOT NULL,
     "padrao" TEXT NOT NULL,
     "conservationState" TEXT NOT NULL,
     "usefulArea" TEXT NOT NULL,

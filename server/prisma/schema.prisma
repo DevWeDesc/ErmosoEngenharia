@@ -39,14 +39,14 @@ model CompletionReport {
   id Int    @id @default(autoincrement())
   leadNumberId String @unique
   lead ReportReceived @relation(fields: [leadNumberId], references: [leadNumber])
-  standardApparentAge String
+  apparentAge String
   padrao String
   conservationState String
   usefulArea String
   homogenizedArea String
   landArea String
   parkingSpaces String
-  dateReport String
+  dateReport DateTime? @default(now())
  } 
 
 model ReportsDocuments {

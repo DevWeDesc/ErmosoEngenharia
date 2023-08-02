@@ -18,10 +18,12 @@ interface RequestBodyProps {
   iptu: string;
   leadNumber: string;
   registration: string
+  reportsDocuments?: { documentsPath: string[] }[];
+  completionReport?: RequestCompletionReport;
 }
 
 interface RequestCompletionReport {
-  standardApparentAge: string;
+  apparentAge: string;
   padrao: string;
   conservationState: string;
   usefulArea: string;
@@ -146,9 +148,8 @@ export const reportReceveid = {
       const leadNumber = request.params.leadNumber;
       const report = await prisma.reportReceived.findUnique({
         where: { leadNumber },
-        include: {
-          reportsDocuments: {select: { documentsPath: true }},
-          completionReport: {select: {standardApparentAge: true, padrao: true, conservationState: true, usefulArea: true, homogenizedArea: true, landArea: true, parkingSpaces: true, dateReport: true}},
+        include: {    
+          completionReport: {select: { apparentAge: true, padrao: true, conservationState: true, usefulArea: true, homogenizedArea: true, landArea: true, parkingSpaces: true}},
         },
       });
 
@@ -160,22 +161,19 @@ export const reportReceveid = {
           cep: report.cep,
           neighbour: report.neighbour,
           state: report.state,
-          contactOne: report.contactOne,
+          contactOne: report.contactOne,  
           contactTwo: report.contactTwo,
           guaranteeValue: report.guaranteeValue,
           iptu: report.iptu,
           leadNumber: report.leadNumber,
           registration: report.registration,
-          document: report.reportsDocuments?.flatMap((doc) => doc.documentsPath),
-          standardApparentAge: report.completionReport?.conservationState,
+          apparentAge: report.completionReport?.conservationState,
           padrao: report.completionReport?.padrao,
           conservationState: report.completionReport?.conservationState,
           usefulArea: report.completionReport?.usefulArea,
           homogenizedArea: report.completionReport?.homogenizedArea,
           landArea: report.completionReport?.landArea,
           parkingSpaces: report.completionReport?.parkingSpaces,
-          dateReport: report.completionReport?.dateReport,
-
         }
         return fullData
         }
