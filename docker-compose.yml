@@ -1,0 +1,43 @@
+version: '3.9'
+services:
+  frontend:
+    build: 
+      context: ./
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+    platform: linux/x86_64
+    healthcheck:
+      test: ["CMD", "lsof", "-t", "-i:3000"]
+      timeout: 10s
+      retries: 5
+  backend:
+    build: 
+      context: ./server
+      dockerfile: Dockerfile
+    ports:
+      - 3333:3333
+    platform: linux/x86_64
+    depends_on:
+      - db
+    command: sh -c "npx prisma migrate dev && npm run dev"
+    environment:
+      - JWT_TOKEN="secret"
+      - DATABASE_URL="postgresql://postgres:123@db:5432/mydb?schema=ermoso"
+  db:
+    image: postgres
+    container_name: db
+    platform: linux/x86_64
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: 123
+      POSTGRES_USER: postgres 
+      POSTGRES_DB: mydb 
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+

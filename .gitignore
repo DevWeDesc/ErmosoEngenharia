@@ -18,7 +18,8 @@
 .env
 */.env
 
-*/security
+# */security
+server/security
 # production
 /build
 
