@@ -2,3 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 @import '~react-toastify/dist/ReactToastify.css';
+
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #b6b4b4;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #757575;
+}

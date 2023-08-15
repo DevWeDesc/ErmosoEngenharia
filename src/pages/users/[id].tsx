@@ -8,6 +8,7 @@ import { toast } from 'react-toastify'
 import { api } from '@/services/api'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
+import Cookies from 'js-cookie'
 
 
 interface IUpdate {
@@ -29,17 +30,35 @@ export default function Editar() {
   const { id } = router.query;
 
   async function getUserById(){
+    
     await api.get(`/user/${id}`).then((res)=> {
       setValue('email', res.data.email);
       setValue('password', res.data.password);
       setValue('username', res.data.username);
       setValue('roles', res.data.roles[0].includes('admin') ? 'admin' : 'user');
+      
     }).catch((err)=> {
       console.log(err)
     })
   }
 
+  async function handleVerifyRole(){
+    try {
+      const token = Cookies.get('token');
+      const response = await api.post("/decodetoken", { token });
+  
+      if (!response.data.role[0].includes('admin')) {
+        router.push('/users');
+        toast.error("Você não tem acesso");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+
+  }
   useEffect( () => {  
+
+    handleVerifyRole();
     getUserById();
   }, []);
 
@@ -50,6 +69,7 @@ export default function Editar() {
   
   async function handleUpdateSubmission(data: IUpdate, id: number){
     JSON.stringify(data)
+    console.log(data)
     try {
       await api.put(`/user/${id}`, data).then((res) => {
         toast.success("Cadastro atualizado com sucesso!")

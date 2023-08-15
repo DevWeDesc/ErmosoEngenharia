@@ -1,20 +1,17 @@
 'use client'
-import { Paginaton } from "@/components/Pagination";
 import { Sidebar } from "@/components/Sidebar";
 import { api } from "@/services/api";
 import { Flex, SimpleGrid, Box, Text,  Table, Thead, Th, Tr, Tbody, Td, Button, Input, Select, Menu, MenuButton, MenuList, MenuItem, HStack } from "@chakra-ui/react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
-import { report } from "process";
 import { useState, useEffect } from 'react';
 import { IoChevronDownCircleOutline } from "react-icons/io5";
 import { toast } from "react-toastify";
-import { HiOutlineDocumentDownload } from 'react-icons/hi'
 
 interface ReportsProps {
     id: string | number; 
 	customerName: string;
-		   adress: string;
+    address: string;
 		contactOne: string;
 		contactTwo: string;
 	registration: string;
@@ -22,7 +19,7 @@ interface ReportsProps {
 		leadNumber: string;
 guaranteeValue: string;
 	      status: string;
-     document: []
+      document: []
 }
 const Status = dynamic(() => import("./styles").then((mod) => mod.Status), {
   ssr: false,
@@ -30,7 +27,7 @@ const Status = dynamic(() => import("./styles").then((mod) => mod.Status), {
 export default function Reports() {
   
   const router = useRouter()
-
+  
   const [reports, setReports] = useState<ReportsProps[]>([])
   const [reloadData, setReloadData] = useState(false)
 
@@ -56,7 +53,6 @@ export default function Reports() {
    
   },[reloadData])
 
-
   return (
 <Flex direction="column" minH="80vh">
     <Flex w="100%" my="6" maxWidth={1480} mx="auto" px="6">
@@ -65,17 +61,16 @@ export default function Reports() {
         <Box
         p="6"
         textAlign="center"
-      
         className="bg-slate-900 text-xs"
         rounded="8"
         minHeight="320px"
-        m="2"
-        >
+        maxHeight="420px"
+        overflowY={'auto'}
+        m="2" >
 
           <Text mb="4" fontWeight="bold" className="text-zinc-300">LAUDOS ABERTOS</Text> 
           <Button colorScheme="whatsapp" onClick={() => {setReloadData(true);console.log()}}>Atualizar Laudos</Button>
 
-       
         <Table colorScheme="whatsapp">
           <Thead  >
             <Tr>
@@ -94,7 +89,7 @@ export default function Reports() {
               reports.map((report) => (
                 <Tr key={report.id}>
                 <Td className="text-zinc-300">{report.customerName}</Td>
-                <Td className="text-zinc-300">{report.adress}</Td>
+                <Td className="text-zinc-300">{report.address}</Td>
                 <Td className="text-zinc-300 !p-2">
                   <Flex>{report.contactOne}</Flex>
                   <Flex>{report.contactTwo}</Flex>
@@ -108,17 +103,11 @@ export default function Reports() {
                     {
                       report.document?.map((value, index) => (
                        
-                      <MenuItem textAlign="center" bgColor="transparent" as="a" download fontWeight="bold" fontSize="2xl" href={`http://localhost:3333/dowload/${value}`} >Documento: {index}</MenuItem>
+                      <MenuItem textAlign="center" bgColor="transparent" as="a" download fontWeight="bold" fontSize="2xl" href={`http://localhost:3333/dowload/${value}`} >Documento: {index +1}</MenuItem>
                       ))
                     }
                     </MenuList>
                   </Menu>
-           
-          
-               
-
-           
-                
                 </Td>
                 <Td className="text-zinc-300">{report.leadNumber}</Td>
                 <Td className="text-zinc-300">{report.guaranteeValue}</Td>
@@ -130,9 +119,6 @@ export default function Reports() {
    
           </Tbody>
         </Table>
-        <Paginaton />
-        
-        
         </Box>
       </SimpleGrid>
     </Flex>

@@ -1,14 +1,61 @@
 import { useRouter } from 'next/router';
-import { Box, Button, Flex, Text, SimpleGrid, HStack } from "@chakra-ui/react";
-import React from 'react';
-import { Input } from '@/components/Input';
+import { Box, Button, Flex, Text, SimpleGrid, HStack, TableContainer, Table, Tbody, Tr, Td, Menu, MenuButton, MenuList, MenuItem } from "@chakra-ui/react";
+import { api } from "@/services/api";
+import React, { useEffect, useState } from 'react';
+import { IoChevronDownCircleOutline } from 'react-icons/io5'
+import moment from 'moment';
+
+
+interface ReportProps {
+  id: number;
+  customerName: string;
+  address: string;
+  district: string;
+  cep: string;
+  neighbour: string;
+  state: string;
+  contactOne: string;
+  contactTwo: string;
+  registration: string;
+  iptu: string;
+  leadNumber: string;
+  guaranteeValue: string;
+  status: string;
+  leadNumberId: string;
+  padrao: string;
+  apparentAge: string;
+  conservationState: string;
+  usefulArea: string;
+  homogenizedArea: string;
+  landArea: string;
+  parkingSpaces: string;
+  dateReport: string;
+  document: [];
+}
 
 export default function Forms() {
-
+  
   const router = useRouter();
   const { leadNumber } = router.query;
 
+  const [report, setReport] = useState<ReportProps>()
+  const [renderReport, setRenderReport] = useState(false)
+
+  async function getReport() {
+    await api.get(`/report/${leadNumber}`).then((res)=> {
+      setReport(res.data)
+      setRenderReport(true)
+    }).catch((err)=> {
+      console.log(err)
+    } )
+  }
+
+  useEffect (()=> {
+    getReport()
+    
+  },[])
   return (
+    
   <Flex w="75%" my="20" maxWidth={1480} mx="auto" px="6">
     <SimpleGrid flex='1' gap="4" alignItems="flex-start" >
       <Box
@@ -20,220 +67,92 @@ export default function Forms() {
       >
       <Text mb="4" fontWeight="bold" className="text-base text-zinc-300">DETALHES DO LAUDO {leadNumber}</Text>
       <Text mb="4" mt="12" fontWeight="bold" className="text-zinc-300">DADOS DO CLIENTE</Text>
-      <Flex gap="4" p="4">
-        <Input
-          label="Nome"
-          name="name"
-          id="name"
-          value="preencher API"
-          isDisabled={true}
-        />
-        <Input
-          label="Endereço do cliente"
-          name="adressClient"
-          id="adressClient"
-          value="preencher API"
-          isDisabled={true}
-        />
-      </Flex>
-      <Flex gap="4" p="4">
-        <Input
-          label="Contato 01"
-          name="contactOne"
-          id="contactOne"
-          value="preencher API"
-          isDisabled={true}
-        />
-        <Input
-          label="Contato 02"
-          name="contactTwo"
-          id="contactTwo"
-          value="preencher API"
-          isDisabled={true}
-        />
-      </Flex>
-      <Flex gap="4" p="4">
-        <Input
-          label="Matricula"
-          name="registration"
-          id="registration"
-          value="preencher API"
-          isDisabled={true}
-        />
-        <Input
-          label="IPTU"
-          name="iptu"
-          id="iptu"
-          value="preencher API"
-          isDisabled={true}
-        />
-      </Flex>
-      <Flex gap="4" p="4" >
-        <Input
-          label="Número do lead"
-          name="leadNumber"
-          id="leadNumber"
-          value="preencher API"
-          isDisabled={true}
-        />
-        <Input
-          label="Valor de garantia"
-          name="guaranteeValue"
-          id="guaranteeValue"
-          value="preencher API"
-          isDisabled={true}
-        />
-      </Flex>
-      <Text mb="4" mt="12" fontWeight="bold" className="text-zinc-300">DADOS DO IMÓVEL</Text>
-      <Flex gap="4" p="4">
-        <Input
-          label="Endereço"
-          name="address"
-          id="address"
-          value="preencher API"
-          isDisabled={true}
-        />
-        <Input
-          label="Número"
-          name="number"
-          id="number"
-          value="preencher API"
-          isDisabled={true}
-        />
-      </Flex>
-      <Flex gap="4" p="4">     
-        <Input
-          label="Complemento"
-          name="complement"
-          id="complement"
-          value="preencher API"
-          isDisabled={true}
-        />
-        <Input
-          label="Andar"
-          name="floor"
-          id="floor"
-          value="preencher API"
-          isDisabled={true}
-        />   
-      </Flex>
-      <Flex gap="4" p="4">
-        <Input
-          label="Bairro"
-          name="neighborhood"
-          id="neighborhood"
-          value="preencher API"
-          isDisabled={true}
-        />
-        <Input
-          label="Cidade"
-          name="city"
-          id="city"
-          value="preencher API"
-          isDisabled={true}
-        />
-        <Input
-          label="Estado"
-          name="state"
-          id="state"
-          value="preencher API"
-          isDisabled={true}
-        />
-      </Flex>
-      <Flex gap="4" p="4">
-        <Input
-          label="CEP"
-          name="cep"
-          id="cep"
-          value="preencher API"
-          isDisabled={true}
-        />
-        <Input
-          label="Tipo de Propriedade"
-          name="propertyType"
-          id="propertyType"
-          value="preencher API"
-          isDisabled={true}
-        />
-        <Input
-          label="Condominío"
-          name="condominium"
-          id="condominium"
-          value="preencher API"
-          isDisabled={true}
-        />
-      </Flex>
-      <Flex gap="4" p="4">
-        <Input
-          label="Idade aparente"
-          name="apparentAge"
-          id="apparentAge"
-          value="preencher API"
-          isDisabled={true}
-        />
-        <Input
-          label="Padrão"
-          name="standard"
-          id="standard"
-          value="preencher API"
-          isDisabled={true}
-        />
-        <Input
-          label="Estado de conservação"
-          name="conservationState"
-          id="conservationState"
-          value="preencher API"
-          isDisabled={true}
-        />
-      </Flex>
-      <Flex gap="4" p="4">
-        <Input
-          label="Área útil"
-          name="usefulArea"
-          id="usefulArea"
-          value="preencher API"
-          isDisabled={true}
-        />
-        <Input
-          label="Área homogeneizada"
-          name="homogenizedArea"
-          id="homogenizedArea"
-          value="preencher API"
-          isDisabled={true}
-        />
-        <Input
-          label="Área de terreno"
-          name="landArea"
-          id="landArea"
-          value="preencher API"
-          isDisabled={true}
-        />
-      </Flex>
-      <Flex gap="4" p="4">
-        <Input
-          label="Vagas"
-          name="vacancies"
-          id="vacancies"
-          value="preencher API"
-          isDisabled={true}
-        />
-        <Input
-          label="Valor"
-          name="value"
-          id="value"
-          value="preencher API"
-          isDisabled={true}
-        />
-        <Input
-          label="Data do laudo"
-          name="reportDate"
-          id="reportDate"
-          value="preencher API"
-          isDisabled={true}
-        />
-      </Flex>
+      {
+        renderReport ?
+          <TableContainer>
+            <Table variant='simple'className='text-white' >
+              <Tbody>
+                <Tr>
+                  <Td>NOME DO CLIENTE</Td>
+                  <Td>{report?.customerName}</Td>
+                </Tr>
+                <Tr>
+                  <Td>ENDEREÇO</Td>
+                  <Td>{report?.address}</Td>
+                </Tr>
+                <Tr>
+                  <Td>NOME DO CLIENTE</Td>
+                  <Td>{report?.district}</Td>
+                </Tr>
+                <Tr>
+                  <Td>CONTATO 01</Td>
+                  <Td>{report?.contactOne}</Td>
+                </Tr>
+                <Tr>
+                  <Td>CONTATO 02</Td>
+                  <Td>{report?.contactTwo}</Td>
+                </Tr>
+                <Tr>
+                  <Td>LEAD</Td>
+                  <Td>{report?.leadNumber}</Td>
+                </Tr>
+                <Tr>
+                  <Td>VALOR DA GARANTIA</Td>
+                  <Td>{report?.guaranteeValue}</Td>
+                </Tr>
+                <Tr>
+                  <Td>IDADE APARENTE</Td>
+                  <Td>{report?.apparentAge}</Td>
+                </Tr>
+                <Tr>
+                  <Td>PADRAO</Td>
+                  <Td>{report?.padrao}</Td>
+                </Tr>
+                <Tr>
+                  <Td>ESTADO DE CONSERVAÇÃO</Td>
+                  <Td>{report?.conservationState}</Td>
+                </Tr>
+                <Tr>
+                  <Td>ÁREA ÚTIL</Td>
+                  <Td>{report?.usefulArea}</Td>
+                </Tr>
+                <Tr>
+                  <Td>ÁREA HOMOGENEIZADA</Td>
+                  <Td>{report?.homogenizedArea}</Td>
+                </Tr>
+                <Tr>
+                  <Td>ÁREA DE TERRENO</Td>
+                  <Td>{report?.landArea}</Td>
+                </Tr>
+                <Tr>
+                  <Td>VAGAS DE GARAGEM</Td>
+                  <Td>{report?.parkingSpaces}</Td>
+                </Tr>
+                <Tr>
+                  <Td>DATA DO LAUDO</Td>
+                  <Td>{ moment(report?.dateReport).format('DD/MM/YYYY')}</Td>
+                </Tr>
+              </Tbody>
+            </Table>
+          </TableContainer>
+        : <div> <Text>Carregando...</Text> </div>
+      }
+   
       <HStack justify="center" spacing='25px' py="12">
-        <Button colorScheme="yellow">Download do PDF</Button>
+        <Menu>
+          <MenuButton colorScheme="yellow" as={ Button } rightIcon={ <IoChevronDownCircleOutline /> }>
+            Download do PDF
+          </MenuButton>
+          <MenuList bgColor="black" fontWeight="bold" overflowY="auto" w="100%" display="flex" flexDirection="column" textAlign="center">
+          {
+            report?.document?.map((value, index) => (
+              <MenuItem textAlign="center" bgColor="transparent" as="a" download fontWeight="bold" fontSize="2xl" href={`http://localhost:3333/dowload/${value}`}>
+                Documento: {index +1}
+              </MenuItem>
+            ))
+          }
+          </MenuList>
+        </Menu>
         <Button colorScheme="teal" onClick={()=> router.push('/history') }>Voltar</Button>
       </HStack>
 

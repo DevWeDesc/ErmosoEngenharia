@@ -2,12 +2,12 @@
   Warnings:
 
   - You are about to drop the column `address` on the `ReportReceived` table. All the data in the column will be lost.
-  - Added the required column `adress` to the `ReportReceived` table without a default value. This is not possible if the table is not empty.
+  - Added the required column `address` to the `ReportReceived` table without a default value. This is not possible if the table is not empty.
 
 */
 -- AlterTable
 ALTER TABLE "ReportReceived" DROP COLUMN "address",
-ADD COLUMN     "adress" TEXT NOT NULL,
+ADD COLUMN     "address" TEXT NOT NULL,
 ADD COLUMN     "cep" TEXT,
 ADD COLUMN     "district" TEXT,
 ADD COLUMN     "neighbour" TEXT,
