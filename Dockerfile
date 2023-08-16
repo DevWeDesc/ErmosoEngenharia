@@ -1,6 +1,6 @@
-FROM node:14
+FROM node:alpine3.18
 
-RUN npm install -g npm@latest
+# RUN npm install -g npm@latest
 
 WORKDIR /ermosoengenharia
 
