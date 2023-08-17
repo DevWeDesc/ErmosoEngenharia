@@ -1,43 +1,59 @@
 version: '3.9'
+
+volumes:
+   db-volume:
+    # driver: local
+    # driver_opts:
+    #   type: none
+    #   o: bind
+      # device: ./db-data
+
 services:
   frontend:
-    build: 
-      context: ./
-      dockerfile: Dockerfile
+    image: wedesc/ermosoengenharia:frontend
     ports:
       - 3000:3000
-    platform: linux/x86_64
+    depends_on:
+      - backend
+    networks:
+      - rede-virtual-1
     healthcheck:
       test: ["CMD", "lsof", "-t", "-i:3000"]
       timeout: 10s
       retries: 5
   backend:
-    build: 
-      context: ./server
-      dockerfile: Dockerfile
+    image: wedesc/ermosoengenharia:backend
     ports:
       - 3333:3333
-    platform: linux/x86_64
     depends_on:
       - db
+    networks:
+      - rede-virtual-1
+      - rede-virtual-2
     command: sh -c "npx prisma migrate dev && npm run dev"
-    environment:
-      - JWT_TOKEN="secret"
-      - DATABASE_URL="postgresql://postgres:123@db:5432/mydb?schema=ermoso"
   db:
     image: postgres
     container_name: db
     platform: linux/x86_64
     ports:
       - "5432:5432"
+    networks:
+      - rede-virtual-2
     environment:
       POSTGRES_PASSWORD: 123
       POSTGRES_USER: postgres 
       POSTGRES_DB: mydb 
     restart: always
+    volumes:
+      - db-volume:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 30s
       timeout: 10s
       retries: 5
 
+networks:
+  rede-virtual-1: 
+    driver: bridge  
+  rede-virtual-2:      
+    driver: bridge
